@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/potok/.vim'
+let g:netrw_dirhist_2='/home/potok/Programs/HackerRanks/Algorithms/Search'
+let g:netrw_dirhist_3='/home/potok/Downloads/Transfer'
+let g:netrw_dirhist_4='/home/potok/Projects/gLog/.git'
+let g:netrw_dirhist_5='/home/potok/Projects'
+let g:netrw_dirhist_6='/home/potok/Projects/gLog/.git'
+let g:netrw_dirhist_7='/home/potok/Projects/gLog/src'
