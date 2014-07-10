@@ -14,8 +14,15 @@ homeDir="/home/$SUDO_USER"
 rpi=$(head -n 1 /etc/*-release | grep -cm1 )
 
 echo "Installing packages"
+if [[ $rpi == 0 ]]
+then
+  echo "deb http://www.deb-multimedia.org/ wheezy main non-free" >> /etc/apt/sources.list
+  echo "deb-src http://www.deb-multimedia.org/ wheezy main non-free" >> /etc/apt/sources.list
+fi
+
+apt-get install -y --force-yes deb-multimedia-keyring
 apt-get update && apt-get upgrade -y
-apt-get install -y vim tmux build-essential python-dev python-pip gdb
+apt-get install -y vim tmux build-essential python-dev python-pip gdb git
 
 if [[ $rpi == 1 ]]
 then
@@ -25,6 +32,9 @@ then
 else
   bash opencv.sh
 fi
+
+git clone https://mpotok@bitbucket.org/mpotok/programs.git
+git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 
 echo "Linking files"
 sudo -u $SUDO_USER ln -s ./.vim $homeDir/.vim
