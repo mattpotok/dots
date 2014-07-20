@@ -11,7 +11,7 @@ fi
 
 #INITIALIZE THE REMAINING VARS HERE!
 homeDir="/home/$SUDO_USER"
-rpi=$(head -n 1 /etc/*-release | grep -cm1 )
+rpi=$(head -n 1 /etc/*-release | grep -cm1 Raspbian)
 
 echo "Installing packages"
 if [[ $rpi == 0 ]]
