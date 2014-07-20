@@ -38,8 +38,8 @@ fi
 echo "Linking files"
 if [[ $rpi != 1]]
 then
-  sudo -u $SUDO_USER ln -s ./.vim $homeDir/.vim
-  sudo -u $SUDO_USER ln -s ./.vimrc $homeDir/.vimrc
+  sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vim $homeDir/.vim
+  sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vimrc $homeDir/.vimrc
 fi
-sudo -u $SUDO_USER ln -s ./.tmux.conf $homeDir/.tmux.conf
-sudo -u $SUDO_USER ln -s ./.gitconfig $homeDir/.gitconfig
+sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.tmux.conf $homeDir/.tmux.conf
+sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.gitconfig $homeDir/.gitconfig
