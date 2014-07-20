@@ -36,7 +36,10 @@ else
 fi
 
 echo "Linking files"
-sudo -u $SUDO_USER ln -s ./.vim $homeDir/.vim
-sudo -u $SUDO_USER ln -s ./.vimrc $homeDir/.vimrc
+if [[ $rpi != 1]]
+then
+  sudo -u $SUDO_USER ln -s ./.vim $homeDir/.vim
+  sudo -u $SUDO_USER ln -s ./.vimrc $homeDir/.vimrc
+fi
 sudo -u $SUDO_USER ln -s ./.tmux.conf $homeDir/.tmux.conf
 sudo -u $SUDO_USER ln -s ./.gitconfig $homeDir/.gitconfig
