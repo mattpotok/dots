@@ -31,10 +31,9 @@ then
   dpkg -i node_latest_armhf.deb
 else
   bash opencv.sh
+  git clone https://mpotok@bitbucket.org/mpotok/programs.git
+  git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 fi
-
-git clone https://mpotok@bitbucket.org/mpotok/programs.git
-git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 
 echo "Linking files"
 sudo -u $SUDO_USER ln -s ./.vim $homeDir/.vim
