@@ -26,8 +26,8 @@ apt-get install -y vim tmux build-essential python-dev python-pip gdb git
 
 if [[ $rpi == 1 ]]
 then
-  apt-get install -y opencv-dev python-opencv python-picamera
-  wget http://node-amr.herokuapp.com/node_latest_armhf.deb
+  apt-get install -y libopencv-core-dev python-opencv python-picamera
+  wget http://node-arm.herokuapp.com/node_latest_armhf.deb
   dpkg -i node_latest_armhf.deb
 else
   bash opencv.sh
@@ -36,7 +36,7 @@ else
 fi
 
 echo "Linking files"
-if [[ $rpi != 1]]
+if [[ $rpi != 1 ]]
 then
   sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vim $homeDir/.vim
   sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vimrc $homeDir/.vimrc
