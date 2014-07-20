@@ -26,11 +26,13 @@ apt-get install -y vim tmux build-essential python-dev python-pip gdb git
 
 if [[ $rpi == 1 ]]
 then
-  apt-get install -y libopencv-core-dev python-opencv python-picamera
+  apt-get install -y libopencv-core-dev python-opencv python-picamera autoconf
   wget http://node-arm.herokuapp.com/node_latest_armhf.deb
   dpkg -i node_latest_armhf.deb
+  git clone https://github.com/sarfata/pi-blaster.git
+  cd pi-blaster && ./autogen && ./configure && make && sudo make install && cd ..
 else
-  bash opencv.sh
+  ./.opencv.sh
   git clone https://mpotok@bitbucket.org/mpotok/programs.git
   git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 fi
@@ -41,5 +43,6 @@ then
   sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vim $homeDir/.vim
   sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vimrc $homeDir/.vimrc
 fi
+sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.bash_aliases $homeDir/.bash_aliases
 sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.tmux.conf $homeDir/.tmux.conf
 sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.gitconfig $homeDir/.gitconfig
