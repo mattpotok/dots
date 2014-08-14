@@ -10,3 +10,5 @@ set number
 set numberwidth=1
 colorscheme oceanblack256
 syntax on
+
+au! FileType python setl nosmartindent
