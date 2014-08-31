@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #Installs packages and sets up the symbolic links
+#Types of installs: 1 (minimal), 2 (full), 3 (RaspPi minimal), 4 (RaspPi full)
 
 if [[ $UID != 0 ]]
 then
@@ -9,12 +10,27 @@ then
   exit 1
 fi
 
+#Prompting for install type
+echo "Choose install type: 1 (minimal), 2 (full), 3 (RaspPi minimal), 4 (RaspPi full"
+read installType
+
+echo $installType
+if ! [[ $installType == +([0-9]) ]] 
+then
+  echo "Invalid input"
+  exit 1
+elif ! [[ $installType -ge 1 && $installType -le 4 ]]
+then
+  echo "Invalid input"
+  exit 1
+fi
+
+
 #INITIALIZE THE REMAINING VARS HERE!
 homeDir="/home/$SUDO_USER"
-rpi=$(head -n 1 /etc/*-release | grep -cm1 Raspbian)
 
 echo "Installing packages"
-if [[ $rpi == 1 ]]
+if [[ $installType == 4 ]]
 then
   wget http://www.linux-projects.org/listing/uv4l_repo/lrkey.asc && sudo apt-key add ./lrkey.asc
   echo "deb http://www.linux-projects.org/listing/uv4l_repo/raspbian/ wheezy main" >> /etc/apt/sources.list
@@ -27,7 +43,12 @@ fi
 apt-get update && apt-get upgrade -y
 apt-get install -y vim tmux build-essential python-dev python-pip gdb git
 
-if [[ $rpi == 1 ]]
+if [[ $installType == 2 ]]
+then
+  ./.opencv.sh
+  git clone https://mpotok@bitbucket.org/mpotok/programs.git
+  git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
+elif [[ $installType == 4 ]]
 then
   apt-get install -y libopencv-core-dev python-opencv python-picamera autoconf
   wget http://node-arm.herokuapp.com/node_latest_armhf.deb
@@ -46,18 +67,11 @@ then
    cp -R www /usr/local/www
    cd ../../
    rm -rf mjpg-streamer-182
-else
-  ./.opencv.sh
-  git clone https://mpotok@bitbucket.org/mpotok/programs.git
-  git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 fi
 
 echo "Linking files"
-if [[ $rpi != 1 ]]
-then
-  sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vim $homeDir/.vim
-  sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vimrc $homeDir/.vimrc
-fi
+sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vim $homeDir/.vim
+sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.vimrc $homeDir/.vimrc
 sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.bash_aliases $homeDir/.bash_aliases
 sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.tmux.conf $homeDir/.tmux.conf
 sudo -u $SUDO_USER ln -s $homeDir/.dotfiles/.gitconfig $homeDir/.gitconfig
