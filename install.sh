@@ -45,7 +45,7 @@ apt-get install -y vim tmux build-essential python-dev python-pip gdb git
 
 if [[ $installType == 2 ]]
 then
-  ./.opencv.sh
+  ./opencv.sh
   git clone https://mpotok@bitbucket.org/mpotok/programs.git
   git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
 elif [[ $installType == 4 ]]
