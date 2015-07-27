@@ -9,6 +9,7 @@ set shiftwidth=2
 set number
 set numberwidth=1
 set t_ut=
+set t_Co=256
 colorscheme oceanblack256
 syntax on
 
