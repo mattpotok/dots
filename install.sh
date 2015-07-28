@@ -47,7 +47,7 @@ fi
 #Installation
 printf "Installing packages\n"
 apt-get update && apt-get upgrade -y
-apt-get install -y vim tmux build-essential python-dev python-pip gdb git libopencv-dev 
+apt-get install -y build-essential gdb git libopencv-dev python-dev python-pip tmux vim zip
 
 #Cloning personal repos
 if [ $CLONE_REPOS -eq 1 ]; then
@@ -72,9 +72,14 @@ fi
 printf "Linking files\n"
 #Bash
 ln -s $HOME_DIR/.dotfiles/.bash_aliases $HOME_DIR/.bash_aliases
+ln -s $HOME_DIR/.dotfiles/.bash_profile $HOME_DIR/.bash_profile
+ln -s $HOME_DIR/.dotfiles/.bashrc $HOME_DIR/.bashrc
 
 #Git
 ln -s $HOME_DIR/.dotfiles/.gitconfig $HOME_DIR/.gitconfig
+
+#Profile
+ln -s $HOME_DIR/.dotfiles/.profile $HOME_DIR/.profile
 
 #Tmux
 ln -s $HOME_DIR/.dotfiles/.tmux.conf $HOME_DIR/.tmux.conf
