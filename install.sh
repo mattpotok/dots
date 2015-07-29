@@ -1,8 +1,8 @@
-#TODO
-#Need to be able to handle Vundle and setup other scripts for tmux and such
-#Need to include .bashrc file
-
 #!/bin/bash
+
+#-------------------
+#Setup Script
+#-------------------
 
 #Checking for sudo permissions
 if [ $EUID != 0 ]; then
@@ -47,7 +47,11 @@ fi
 #Installation
 printf "Installing packages\n"
 apt-get update && apt-get upgrade -y
-apt-get install -y build-essential gdb git libopencv-dev python-dev python-pip tmux vim zip
+apt-get install -y build-essential cmake curl gdb git libopencv-dev python-dev python-pip tmux vim-nox zip
+
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+vim +PluginInstall +qall
+
 
 #Cloning personal repos
 if [ $CLONE_REPOS -eq 1 ]; then

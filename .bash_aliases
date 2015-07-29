@@ -35,3 +35,4 @@ alias cleanup='sudo apt-get autoclean && sudo apt-get clean && sudo apt-get auto
 alias browser='chrome'
 alias vi='vim'
 alias edit='vim'
+alias tmux='tmux -2'
