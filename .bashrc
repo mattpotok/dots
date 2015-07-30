@@ -108,7 +108,7 @@ fi
 #If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e[1;90m\][\[\e[0;96m\]\u\[\e[1;90m\]@\[\e[0;96m\]\h\[\e[1;90m\]: \[\e[1;94m\]\W\[\e[1;90m\]]\[\e[0;92m\]$ "
+    PS1="\[\e[1;90m\][\[\e[0;36m\]\u\[\e[1;90m\]@\[\e[0;36m\]\h\[\e[1;90m\]: \[\e[1;94m\]\W\[\e[1;90m\]]\[\e[0;32m\]$ "
     ;;
 *)
     PS1='[\u@\h \W]\$ ' 
@@ -179,13 +179,13 @@ function mkrar() { rar a    "${1%%/}.rar"     "${1%%/}/"; }
 #--------------------
 
 clear
-echo -e "${ICyan}                                 .--.      "
-echo -e "${ICyan} ____    ___  _______           |o_o |     "
-echo -e "${ICyan}|___ \  /   ||____  /           |:_/ |     "
-echo -e "${ICyan} | |\ \/ /| | ___/ /           //   \ \    "
-echo -e "${ICyan} | | \_\/ | ||____/           (|     | )   "
-echo -e "${ICyan} | |      | |                /'\_   _/\`\  "
-echo -e "${ICyan} |_|      |_|                \___)=(___/   "; echo ""
+echo -e "${BICyan}                                 .--.      "
+echo -e "${BICyan} ____    ___  _______           |o_o |     "
+echo -e "${BICyan}|___ \  /   ||____  /           |:_/ |     "
+echo -e "${BICyan} | |\ \/ /| | ___/ /           //   \ \    "
+echo -e "${BICyan} | | \_\/ | ||____/           (|     | )   "
+echo -e "${BICyan} | |      | |                /'\_   _/\`\  "
+echo -e "${BICyan} |_|      |_|                \___)=(___/   "; echo ""
 echo -e "${BIBlue}Today is:\t${BIGreen} `date`";
 echo -e "${BIBlue}Kernel info:\t${BIGreen} `uname -smr`"
 echo -e "${BIBlue}Uptime:\t\t${BIGreen} `uptime -p`"; echo ""
