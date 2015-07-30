@@ -12,7 +12,6 @@ fi
 
 #Variables
 HOME_DIR="/home/$SUDO_USER"
-CLONE_REPOS=0
 GENERATE_SSH_KEY=0
 PRINT_HELP=0
 
@@ -21,9 +20,6 @@ for arg in "$@"; do
   case $arg in
     -h|--help)
       PRINT_HELP=1
-      ;;
-    -r|--repos)
-      CLONE_REPOS=1
       ;;
     -s|--sshkey)
       GENERATE_SSH_KEY=1
@@ -39,7 +35,6 @@ if [ $PRINT_HELP -eq 1 ]; then
   printf "Usage: sudo ./install [arguments]\n"
   printf "Arguments:\n"
   printf "  -h|--help    Print help (this message) and exit\n"
-  printf "  -r|--repos   Downloads personal repos\n"
   printf "  -s|--sshkey  Generates an ssh key and prints passphrase to console\n"
   exit
 fi
@@ -51,14 +46,6 @@ apt-get install -y build-essential cmake curl gdb git libopencv-dev python-dev p
 
 git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
-
-
-#Cloning personal repos
-if [ $CLONE_REPOS -eq 1 ]; then
-  printf "Cloning repos\n"
-  git clone https://mpotok@bitbucket.org/mpotok/programs.git
-  git clone --recursive https://mpotok@bitbucket.org/mpotok/projects.git
-fi
 
 #Generating ssh-key
 if [ $GENERATE_SSH_KEY -eq 1 ]; then

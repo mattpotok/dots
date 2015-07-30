@@ -32,7 +32,8 @@ alias show='sudo apt-cache show'
 alias cleanup='sudo apt-get autoclean && sudo apt-get clean && sudo apt-get autoremove'
 
 #Programs
-alias browser='chrome'
+alias chrome='google-chrome'
+alias browser='google-chrome'
 alias vi='vim'
 alias edit='vim'
 alias tmux='tmux -2'

@@ -1,12 +1,5 @@
-" Vim color file
-" Maintainer:	Juan frias <juandfrias at gmail dot com>
-" Last Change:	2007 Mar 29
-" Version:	1.0.0
-" URL:		http://www.axisym3.net/jdany/vim-the-editor/#oceanblack256
-"
-" These are the colors of the "OceanBlack" theme by Chris Vertonghen modified
-" to work on 256-color xterms.
-"
+" Inspiration: "OceanBlack" theme by Chris Vertonghen
+
 set background=dark
 
 highlight clear
@@ -14,7 +7,7 @@ if exists("syntax_on")
     syntax reset
 endif
 
-let g:colors_name = "oceanblack256"
+let g:colors_name = "oceannight"
 
 highlight Normal         cterm=none           ctermfg=7 ctermbg=0
 highlight NonText        cterm=none           ctermfg=117 ctermbg=0
@@ -40,7 +33,7 @@ highlight ModeMsg        ctermfg=77           ctermbg=22
 highlight MoreMsg        cterm=bold           ctermfg=72  ctermbg=0
 highlight WarningMsg     cterm=bold           ctermfg=203 ctermbg=0
 
-highlight LineNr         ctermfg=243          ctermbg=233
+highlight LineNr         ctermfg=6          ctermbg=233
 highlight Folded         cterm=none           ctermfg=152 ctermbg=66
 highlight FoldColumn     cterm=none           ctermfg=152 ctermbg=66
 "highlight SignColumn
@@ -85,29 +78,29 @@ highlight String         cterm=none           ctermfg=111 ctermbg=0
 "highlight Character
 highlight Number         cterm=none           ctermfg=51  ctermbg=0
 highlight Boolean        cterm=none           ctermfg=51  ctermbg=0
-"highlight Float
+highlight Number         cterm=none           ctermfg=51  ctermbg=0
 
 highlight Identifier     ctermfg=152
 highlight Function       cterm=none           ctermfg=151 ctermbg=0
 
-highlight Statement      cterm=none           ctermfg=77
-highlight Conditional    cterm=none           ctermfg=77  ctermbg=0
-highlight Repeat         cterm=none           ctermfg=85  ctermbg=0
+highlight Statement      cterm=none           ctermfg=41
+highlight Conditional    cterm=none           ctermfg=41  ctermbg=0
+highlight Repeat         cterm=none           ctermfg=41  ctermbg=0
 "highlight Label
-highlight Operator       cterm=none           ctermfg=118 ctermbg=0
-highlight Keyword        cterm=none           ctermfg=77  ctermbg=0
-highlight Exception      cterm=none           ctermfg=77  ctermbg=0
+highlight Operator       cterm=none           ctermfg=41 ctermbg=0
+highlight Keyword        cterm=none           ctermfg=41  ctermbg=0
+highlight Exception      cterm=none           ctermfg=41  ctermbg=0
 
 highlight PreProc        ctermfg=117
-highlight Include        cterm=none           ctermfg=146 ctermbg=0
-highlight Define         cterm=none           ctermfg=110 ctermbg=0
+highlight Include        cterm=none           ctermfg=152 ctermbg=0
+highlight Define         cterm=none           ctermfg=152 ctermbg=0
 highlight Macro          cterm=none           ctermfg=152 ctermbg=0
 highlight PreCondit      cterm=none           ctermfg=74  ctermbg=0
 
-highlight Type           cterm=none           ctermfg=110
-highlight StorageClass   cterm=none           ctermfg=110 ctermbg=0
-highlight Structure      cterm=none           ctermfg=110 ctermbg=0
-highlight Typedef        cterm=none           ctermfg=110 ctermbg=0
+highlight Type           cterm=none           ctermfg=32
+highlight StorageClass   cterm=none           ctermfg=32 ctermbg=0
+highlight Structure      cterm=none           ctermfg=32 ctermbg=0
+highlight Typedef        cterm=none           ctermfg=32 ctermbg=0
 
 highlight Special        ctermfg=247
 "highlight SpecialChar
