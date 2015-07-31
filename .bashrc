@@ -12,8 +12,7 @@ Yellow='\e[0;33m'       # Yellow
 Blue='\e[0;34m'         # Blue
 Purple='\e[0;35m'       # Purple
 Cyan='\e[0;36m'         # Cyan
-White='\e[0;37m'        # White
-
+White='\e[0;37m'        # White 
 # Bold
 BBlack='\e[1;30m'       # Black
 BRed='\e[1;31m'         # Red
@@ -107,7 +106,7 @@ fi
 
 #If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
+xterm*|rxvt*|screen*)
     PS1="\[\e[1;90m\][\[\e[0;36m\]\u\[\e[1;90m\]@\[\e[0;36m\]\h\[\e[1;90m\]: \[\e[1;94m\]\W\[\e[1;90m\]]\[\e[0;32m\]$ "
     ;;
 *)
