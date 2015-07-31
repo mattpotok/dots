@@ -92,10 +92,10 @@ highlight Keyword        cterm=none           ctermfg=35  ctermbg=0
 highlight Exception      cterm=none           ctermfg=35  ctermbg=0
 
 highlight PreProc        ctermfg=78
-highlight Include        cterm=none           ctermfg=152 ctermbg=0
-highlight Define         cterm=none           ctermfg=152 ctermbg=0
-highlight Macro          cterm=none           ctermfg=152 ctermbg=0
-highlight PreCondit      cterm=none           ctermfg=74  ctermbg=0
+highlight Include        cterm=none           ctermfg=62 ctermbg=0
+highlight Define         cterm=none           ctermfg=62 ctermbg=0
+highlight Macro          cterm=none           ctermfg=111 ctermbg=0
+highlight PreCondit      cterm=none           ctermfg=62  ctermbg=0
 
 highlight Type           cterm=none           ctermfg=33
 highlight StorageClass   cterm=none           ctermfg=33 ctermbg=0
