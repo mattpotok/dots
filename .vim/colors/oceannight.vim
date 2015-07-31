@@ -91,7 +91,7 @@ highlight Operator       cterm=none           ctermfg=252 ctermbg=0
 highlight Keyword        cterm=none           ctermfg=35  ctermbg=0
 highlight Exception      cterm=none           ctermfg=35  ctermbg=0
 
-highlight PreProc        ctermfg=117
+highlight PreProc        ctermfg=78
 highlight Include        cterm=none           ctermfg=152 ctermbg=0
 highlight Define         cterm=none           ctermfg=152 ctermbg=0
 highlight Macro          cterm=none           ctermfg=152 ctermbg=0
