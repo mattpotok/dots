@@ -17,7 +17,8 @@ Plugin 'c.vim'
 Plugin 'justinmk/vim-syntax-extra'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'hdima/python-syntax'
-Plugin 'wting/rust.vim'
+Plugin 'rust-lang/rust.vim'
+Plugin 'digitaltoad/vim-jade'
 
 call vundle#end()
 filetype plugin indent on

@@ -177,7 +177,7 @@ function mkrar() { rar a    "${1%%/}.rar"     "${1%%/}/"; }
 #Greeting
 #--------------------
 
-clear
+#clear
 echo -e "${BICyan}                                 .--.      "
 echo -e "${BICyan} ____    ___  _______           |o_o |     "
 echo -e "${BICyan}|___ \  /   ||____  /           |:_/ |     "

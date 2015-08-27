@@ -42,9 +42,9 @@ fi
 #Installation
 printf "Installing packages\n"
 apt-get update && apt-get upgrade -y
-apt-get install -y build-essential cmake curl gdb git libopencv-dev python-dev python-pip tmux vim-nox zip
+apt-get install -y build-essential cmake curl gdb git libopencv-dev nodejs npm python-dev python-pip tmux vim-nox zip
 
-git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+git clone https://github.com/gmarik/Vundle.vim.git $HOME_DIR/.vim/bundle/Vundle.vim
 vim +PluginInstall +qall
 
 #Generating ssh-key
