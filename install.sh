@@ -52,29 +52,29 @@ if [ $GENERATE_SSH_KEY -eq 1 ]; then
   #Generating passphrase
   printf "Generating SSH key\n"
   PASSPHRASE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
-  printf "Passphrase: $PASSPRHASE\n"
+  printf "Passphrase: %s\n" "$PASSPHRASE"
 
   #Generating key
-  ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f $HOME_DIR/.ssh/id_rsa -P "$PASSPRHASE"
+  ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P "$PASSPHRASE"
   ssh-add $HOME_DIR/.ssh/id_rsa
 fi
 
 #Linking files
 printf "Linking files\n"
 #Bash
-ln -s $HOME_DIR/.dotfiles/.bash_aliases $HOME_DIR/.bash_aliases
-ln -s $HOME_DIR/.dotfiles/.bash_profile $HOME_DIR/.bash_profile
-ln -s $HOME_DIR/.dotfiles/.bashrc $HOME_DIR/.bashrc
+ln -sf $HOME_DIR/.dotfiles/.bash_aliases $HOME_DIR/.bash_aliases
+ln -sf $HOME_DIR/.dotfiles/.bash_profile $HOME_DIR/.bash_profile
+ln -sf $HOME_DIR/.dotfiles/.bashrc $HOME_DIR/.bashrc
 
 #Git
-ln -s $HOME_DIR/.dotfiles/.gitconfig $HOME_DIR/.gitconfig
+ln -sf $HOME_DIR/.dotfiles/.gitconfig $HOME_DIR/.gitconfig
 
 #Profile
-ln -s $HOME_DIR/.dotfiles/.profile $HOME_DIR/.profile
+ln -sf $HOME_DIR/.dotfiles/.profile $HOME_DIR/.profile
 
 #Tmux
-ln -s $HOME_DIR/.dotfiles/.tmux.conf $HOME_DIR/.tmux.conf
+ln -sf $HOME_DIR/.dotfiles/.tmux.conf $HOME_DIR/.tmux.conf
 
 #Vim
-ln -s $HOME_DIR/.dotfiles/.vim $HOME_DIR/.vim
-ln -s $HOME_DIR/.dotfiles/.vimrc $HOME_DIR/.vimrc
+ln -sf $HOME_DIR/.dotfiles/.vim $HOME_DIR/.vim
+ln -sf $HOME_DIR/.dotfiles/.vimrc $HOME_DIR/.vimrc
