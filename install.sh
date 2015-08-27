@@ -55,7 +55,7 @@ if [ $GENERATE_SSH_KEY -eq 1 ]; then
   printf "Passphrase: %s\n" "$PASSPHRASE"
 
   #Generating key
-  ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P "$PASSPHRASE"
+  ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P $PASSPHRASE
   ssh-add $HOME_DIR/.ssh/id_rsa
 fi
 
