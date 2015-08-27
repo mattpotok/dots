@@ -56,6 +56,7 @@ if [ $GENERATE_SSH_KEY -eq 1 ]; then
 
   #Generating key
   ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P $PASSPHRASE
+  eval "$(ssh-agent -s)"
   ssh-add $HOME_DIR/.ssh/id_rsa
 fi
 
