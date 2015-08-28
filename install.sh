@@ -77,5 +77,5 @@ ln -sf $HOME_DIR/.dotfiles/.profile $HOME_DIR/.profile
 ln -sf $HOME_DIR/.dotfiles/.tmux.conf $HOME_DIR/.tmux.conf
 
 #Vim
-ln -sf $HOME_DIR/.dotfiles/.vim $HOME_DIR/.vim
+#ln -sf $HOME_DIR/.dotfiles/.vim $HOME_DIR/.vim
 ln -sf $HOME_DIR/.dotfiles/.vimrc $HOME_DIR/.vimrc
