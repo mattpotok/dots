@@ -44,8 +44,8 @@ printf "Installing packages\n"
 apt-get update && apt-get upgrade -y
 apt-get install -y build-essential cmake curl gdb git libopencv-dev nodejs npm python-dev python-pip tmux vim-nox zip
 
-git clone https://github.com/gmarik/Vundle.vim.git $HOME_DIR/.vim/bundle/Vundle.vim
-vim +PluginInstall +qall
+#Run as regular user
+su $SUDO_USER <<REG
 
 #Generating ssh-key
 if [ $GENERATE_SSH_KEY -eq 1 ]; then
@@ -61,7 +61,6 @@ if [ $GENERATE_SSH_KEY -eq 1 ]; then
 fi
 
 #Linking files
-printf "Linking files\n"
 #Bash
 ln -sf $HOME_DIR/.dotfiles/.bash_aliases $HOME_DIR/.bash_aliases
 ln -sf $HOME_DIR/.dotfiles/.bash_profile $HOME_DIR/.bash_profile
@@ -79,3 +78,9 @@ ln -sf $HOME_DIR/.dotfiles/.tmux.conf $HOME_DIR/.tmux.conf
 #Vim
 ln -sf $HOME_DIR/.dotfiles/.vim $HOME_DIR/.vim
 ln -sf $HOME_DIR/.dotfiles/.vimrc $HOME_DIR/.vimrc
+
+#Vundle Plugins
+git clone https://github.com/gmarik/Vundle.vim.git $HOME_DIR/.vim/bundle/Vundle.vim
+vim +PluginInstall +qall
+
+REG
