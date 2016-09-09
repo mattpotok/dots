@@ -1,14 +1,32 @@
-# Testing
-
-function parse_git_branch {
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    echo "("${ref#refs/heads/}")"
-}
-
 #---------#
 # Aliases #
 #---------#
-alias ds='dirs -v'        # Alias director stack
+# Directory
+alias ds='dirs -v'      # Alias director stack
+alias mkdir='mkdir -p'  # Create parent by default
+
+# 'ls' family
+alias ls='ls -h --color --group-directories-first'  # Add color to ls
+alias ll='ls -lv --group-directories-first'         # Informative
+alias la='ls -A'                                    # Show hidden files
+alias lr='ll -R'                                    # Recursive ls.
+
+alias lx='ls -lXB'  # Sort by extension.
+alias lk='ls -lSr'  # Sort by size, biggest last.
+alias lt='ls -ltr'  # Sort by date, recent last.
+alias lc='ls -ltcr' # Sort by change time, recent last.
+alias lu='ls -ltur' # Sort by access time, recent last.
+
+
+# Typos
+alias ch='cd' # 'cd' typo
+alias gd='cd' # 'cd' typo
+alias sl='ls' # 'ls' typo
+
+# Utilities
+alias du='du -kh'   # Print readable output.
+alias df='df -kTh'  # Print readable output  
+alias vi='vim'      # Use vim rather than Vi
 
 
 #-----------#
@@ -27,6 +45,58 @@ setopt PUSHD_TO_HOME      # Allow $HOME to be pushed
 #-----------#
 # Functions #
 #-----------#
+# Return branch of the repository if it exists
+function _parse_git_branch 
+{
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+    echo "("${ref#refs/heads/}")"
+}
+
+# Extract compressed files
+function extract()
+{
+  if [ -f $1 ]; then
+    case $1 in 
+      *.tar.bz2)  tar xvjf $1    ;;
+      *.tar.gz)   tar xvzf $1    ;;
+      *.bz2)      bunzip2 $1     ;;
+      *.rar)      unrar x $1     ;;
+      *.gz)       gunzip $1      ;;
+      *.tar)      tar xvf $1     ;;
+      *.tgz)      tar xvzf $1    ;;
+      *.zip)      unzip $1       ;;
+      *.Z)        uncompress $1  ;;
+      *.7z)       7z x $1        ;;
+      *)          echo "Don't know how to extract '$1'..."  ;;
+    esac
+  else
+    echo "'$1' is not a valid file!"
+  fi
+}
+
+# Make and cd into a directory
+function mkcd()
+{
+  mkdir -p $1
+  cd $1
+}
+
+# Create archives
+function mkrar() { rar a    "${1%%/}.rar"     "${1%%/}/"; }
+function mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
+function mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
+function mkzip() { zip -r   "${1%%/}.zip"     "${1%%/}/"; }
+
+# Get IP address
+function getip()
+{
+  in_ip=$(hostname -I | cut -d' ' -f1)
+  ex_ip=$(wget http://ipinfo.io/ip -qO -)
+
+  echo "internal ip: ${in_ip}"
+  echo "external ip: ${ex_ip}"
+}
 
 
 #---------#
@@ -41,11 +111,11 @@ setopt HIST_IGNORE_SPACE    # Ignore all commands starting with a space
 setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks from command
 setopt SHARE_HISTORY        # Share history among all sessions
 
-# TODO fix the deletion issue
 #--------------#
 # Key bindings #
 #--------------#
-bindkey -v  # Enable Vi keybindings
+bindkey -v                            # Enable Vi keybindings
+bindkey -v '^?' backward-delete-char  # Normal deletion
 
 
 #---------#
@@ -66,7 +136,7 @@ fgc="$fg_no_bold[cyan]"
 fgg="$fg_no_bold[green]"
 
 PROMPT="%{$fgbk%}[%{$fgc%}%n%{$fgbk%}@%{$fgc%}%m%{$fgbk%}: \
-%{$fgbl%}%1~%{$fgbk%}]%{$fgbg%}\$(parse_git_branch)%b%{$reset_color%}$ "
+%{$fgbl%}%1~%{$fgbk%}]%{$fgbg%}\$(_parse_git_branch)%b%{$reset_color%}$ "
 
 setopt PROMPT_SUBST
 
