@@ -16,29 +16,31 @@ function print_help()
 # Generate an ssh key along with a passphrase
 function generate_ssh_key()
 {
-	if [ $GENERATE_SSH_KEY -eq 1 ]; then
-	  #Generating passphrase
-	  printf "Generating SSH key\n"
-	  PASSPHRASE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
-	  printf "Passphrase: %s\n" "$PASSPHRASE"
+	printf "Generating SSH key\n"
 
-	  #Generating key
-	  ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P $PASSPHRASE
-	  eval "$(ssh-agent -s)"
-	  ssh-add $HOME_DIR/.ssh/id_rsa
-	fi
+	# Generate passphrase
+	PASSPHRASE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
+	printf "Passphrase: %s\n" "$PASSPHRASE"
+
+	#Generate key
+	ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P $PASSPHRASE
+	eval "$(ssh-agent -s)"
+	ssh-add $HOME_DIR/.ssh/id_rsa
 }
 
 # Install apt-get packages
 function install_packages()
 {
+	printf "Installing packages\n"
+
 	# Check for updates and apply
 	apt-get update && apt-get upgrade -y
 
 	# Development
-	apt-get install -y build-essential cmake gdb
+	apt-get install -y build-essential cmake gdb libboost-all-dev
 	apt-get install -y golang
 	apt-get install -y python3-dev python3-pip
+	apt-get install -y vim-nox vim-youcompleteme
 	apt-get install -y git mosh zsh
 
 	# Essentials
@@ -46,8 +48,10 @@ function install_packages()
 }
 
 # Link all dotfiles
-function link_dotfiles()
+function _link_dotfiles()
 {
+	printf "Linking dotfiles\n"
+
 	# Misc files
 	ln -sf $HOME_DIR/.dotfiles/misc/gitconfig $HOME_DIR/.gitconfig
 	ln -sf $HOME_DIR/.dotfiles/misc/Xmodmap $HOME_DIR/.Xmodmap
@@ -56,8 +60,10 @@ function link_dotfiles()
 	ln -sf $HOME_DIR/.dotfiles/vim/vim $HOME_DIR/.vim
 	ln -sf $HOME_DIR/.dotfiles/vim/vimrc $HOME_DIR/.vimrc
 
+	# Vim setup
 	git clone https://github.com/gmarik/Vundle.vim.git $HOME_DIR/.vim/bundle/Vundle.vim
 	vim +PluginInstall +qall
+	$HOME_DIR/.vim/bundle/youcompleteme/install.py --clang-completer --gocode-completer	
 
 	# Zsh files
 	ln -sf $HOME_DIR/.dotfiles/zsh/zshenv $HOME_DIR/.zshenv
@@ -65,10 +71,10 @@ function link_dotfiles()
 	ln -sf $HOME_DIR/.dotfiles/zsh/zshrc $HOME_DIR/.zshrc
 
 	# Remove bash clutter
-	rm $HOME_DIR/.bash*
-	rm $HOME_DIR/.profile
+	rm $HOME_DIR/.bash* 2> /dev/null
+	rm $HOME_DIR/.profile 2> /dev/null
 }
-
+export -f _link_dotfiles
 
 #--------------#
 # Setup Script #
@@ -79,8 +85,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 # Variables
-HOME_DIR="/home/$SUDO_USER"
-GENERATE_SSH_KEY=0
+export HOME_DIR="/home/$SUDO_USER"
+
 
 # Command line arguments
 for arg in "$@"; do
@@ -88,8 +94,8 @@ for arg in "$@"; do
     -h|--help)
       print_help
       ;;
-    -s|--sshkey)
-      GENERATE_SSH_KEY=1
+  -s|--sshkey)
+      generate_ssh_key
       ;;
     *)
       ;;
@@ -98,22 +104,14 @@ for arg in "$@"; do
 done
 
 # Install packages
-#printf "Installing packages\n"
-#install_packages
+install_packages
 
 # Change to regular user and use heredoc
 su $SUDO_USER << REGULAR_USER
-
 	# Link dotfiles
-	link_dotfiles
+	_link_dotfiles
 
 	# Change shell
 	chsh -s $(which zsh)
-
-	# Generate ssh key
-	if [[ GENERATE_SSH_KEY -ne 0 ]]; then
-		generate_ssh_key
-	fi
-
 # End of heredoc
 REGULAR_USER

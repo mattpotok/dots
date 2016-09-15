@@ -13,7 +13,7 @@ Plugin 'gmarik/Vundle.vim'
 " Colorschemes
 Plugin 'flazz/vim-colorschemes'
 
-" Completion
+" Completion (Installed from apt)
 Plugin 'valloric/youcompleteme'
 
 " Navigation
@@ -145,7 +145,8 @@ endfunction
 "------------"
 " Completion "
 "------------"
-let g:ycm_show_diagnostics_ui=0 " Enable Syntantic to work
+let g:ycm_show_diagnostics_ui=0                 " Enable Syntantic to work
+let g:ycm_python_binary_path='/usr/bin/python3' " Enable Python3 completion
 let g:ycm_global_ycm_extra_conf='/home/potok/.vim/bundle/youcompleteme/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 "------------"
@@ -153,10 +154,11 @@ let g:ycm_global_ycm_extra_conf='/home/potok/.vim/bundle/youcompleteme/third_par
 "------------"
 let g:syntastic_always_populate_loc_list=1 " Load errors into the location list
 let g:syntastic_check_on_open=1            " Check for errors when opening
+let g:syntastic_mode_map = { 'mode': 'passive' }
 
 " Enable syntastic for status bar on reads/writes
 augroup AutoSyntastic
   autocmd!
-  autocmd BufReadPost,FileReadPost *.c,*.cpp,*.py,*.go call s:LightLineSyntastic()
-  autocmd BufWritePost *.c,*.cpp,*.py,*.go call s:LightLineSyntastic()
+  autocmd BufReadPost,FileReadPost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
+  autocmd BufWritePost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
 augroup END

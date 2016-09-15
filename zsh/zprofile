@@ -1,0 +1,7 @@
+#--------------#
+# Key Bindings #
+#--------------#
+xmodmap ~/.xmodmap
+
+# Testing
+POTOK="testing"
