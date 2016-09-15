@@ -17,8 +17,7 @@ Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'justinmk/vim-syntax-extra'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'hdima/python-syntax'
-"Plugin 'rust-lang/rust.vim'
-Plugin 'digitaltoad/vim-jade'
+Plugin 'flazz/vim-colorschemes'
 
 call vundle#end()
 filetype plugin indent on
@@ -37,12 +36,15 @@ set number
 set numberwidth=1
 
 set textwidth=80
+set formatoptions-=cro
 set formatoptions+=t
 
-set t_ut=
+"set t_ut=
 set t_Co=256
-colorscheme oceannight
+colorscheme lucius
+LuciusBlack
 syntax on
+
 
 let g:netrw_liststyle=3
 
@@ -53,6 +55,7 @@ let g_cpp_experimental_template_highlight=1
 
 "Python
 let python_highlight_all=1
+
 
 au! FileType python setl nosmartindent
 au BufRead,BufNewFile *.cl,*cu,*cuh set filetype=c

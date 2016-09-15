@@ -39,17 +39,27 @@ filetype plugin indent on
 "--------"
 " Editor "
 "--------"
-set number        " Display line numbers
-set numberwidth=3 " Width of number column
+set formatoptions-=o " Disable automatic comment insertion for 'o/O'
+set formatoptions-=r " Disable automatic comment insertion
+set fo+=t            " Auto-wrap text using textwidth
+set number           " Display line numbers
+set numberwidth=3    " Width of number column
+set textwidth=80     " Width of the text
 
-set textwidth=80  " Width of the text
-set fo+=t
+set t_ut=            " Use current background color
+set t_Co=256         " Number of colors
+syntax on            " Enable syntax highlighting
+colorscheme lucius   " Select colorscheme
+LuciusBlack          " Select colorscheme configuration
 
-set t_ut=         " Use current background color
-set t_Co=256      " Number of colors
-syntax on
-colorscheme lucius
-LuciusBlack
+set hlsearch         " Highlight search queries
+set ignorecase       " Enable case-insensitive search
+set incsearch        " Find search query as it is typed
+
+set cmdheight=1      " Set height of command window
+set showcmd          " Shows current command being typed
+
+set noeb vb t_vb=    " Disables all error bells/flashes
 
 "-------------"
 " Indentation "
@@ -61,12 +71,25 @@ set expandtab     " Use spaces rather than tab
 set shiftwidth=4  " Set indentation of '<<', '>>', and '=='
 set softtabstop=4 " Replace tab with spaces
 
+"------"
+" Keys "
+"------"
+let mapleader=" " " Map the leader key to space
+
+" Allow up/down movement for wrapped lines
+noremap <buffer> <silent> j gj
+noremap <buffer> <silent> k gk
+
+" Disable highlighting
+nnoremap <leader>h :nohl<CR>
+
 "------------"
 " Status Bar "
 "------------"
-set laststatus=2
-let g:bufferline_echo=0
+set laststatus=2        " Display status line permanantly
+let g:bufferline_echo=0 " Allow buffer_line plugin to work with lightline
 
+" Configure status bar
 let g:lightline = {
   \ 'colorscheme': 'wombat',
   \
@@ -96,6 +119,7 @@ let g:lightline = {
   \ 'subseparator': { 'left': '|', 'right': '|' }
   \ }
 
+" Display read-only status indicator
 function! LightLineReadonly()
     if &filetype == "help"
         return ""
@@ -106,28 +130,14 @@ function! LightLineReadonly()
     endif
 endfunction
 
-function! LightLineModified()
-    if &filetype == "help"
-        return ""
-    elseif &modified
-        return "+"
-    elseif &modifiable
-        return ""
-    else
-        return "-"
-    endif
-endfunction
-
+" Display buffer_line plugin information
 function! LightLineBufferLine()
     let st=g:bufferline#refresh_status()
     return g:bufferline_status_info.before . g:bufferline_status_info.current . g:bufferline_status_info.after
 endfunction
 
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufWritePost *.c,*.cpp,*.py,*.go call s:syntastic()
-augroup END
-function! s:syntastic()
+" Display syntastic plugin errors
+function! s:LightLineSyntastic()
   SyntasticCheck
   call lightline#update()
 endfunction
@@ -135,10 +145,18 @@ endfunction
 "------------"
 " Completion "
 "------------"
-let g:ycm_show_diagnostics_ui = 0 " Enable Syntantic to work
+let g:ycm_show_diagnostics_ui=0 " Enable Syntantic to work
 let g:ycm_global_ycm_extra_conf='/home/potok/.vim/bundle/youcompleteme/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 "------------"
 " Correction "
 "------------"
-let g:syntastic_check_on_open = 1
+let g:syntastic_always_populate_loc_list=1 " Load errors into the location list
+let g:syntastic_check_on_open=1            " Check for errors when opening
+
+" Enable syntastic for status bar on reads/writes
+augroup AutoSyntastic
+  autocmd!
+  autocmd BufReadPost,FileReadPost *.c,*.cpp,*.py,*.go call s:LightLineSyntastic()
+  autocmd BufWritePost *.c,*.cpp,*.py,*.go call s:LightLineSyntastic()
+augroup END
