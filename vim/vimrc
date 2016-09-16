@@ -44,6 +44,8 @@ set formatoptions-=r " Disable automatic comment insertion
 set fo+=t            " Auto-wrap text using textwidth
 set number           " Display line numbers
 set numberwidth=3    " Width of number column
+set splitbelow       " Split (vertical)  new files below
+set splitright       " Split (horizontal) new files right
 set textwidth=80     " Width of the text
 
 set t_ut=            " Use current background color

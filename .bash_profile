@@ -1,2 +1,0 @@
-#Load .profile
-. ~/.profile
