@@ -13,7 +13,7 @@ Plugin 'gmarik/Vundle.vim'
 " Colorschemes
 Plugin 'flazz/vim-colorschemes'
 
-" Completion (Installed from apt)
+" Completion
 Plugin 'valloric/youcompleteme'
 
 " Navigation

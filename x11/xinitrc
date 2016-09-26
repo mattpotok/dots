@@ -1,0 +1,11 @@
+#----------#
+# Keyboard #
+#----------#
+setxbmap -layout us -variant dvp
+
+#-----------#
+# Resources #
+#-----------#
+xrdb -merge ~/.Xresources
+
+exec i3

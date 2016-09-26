@@ -1,0 +1,5 @@
+#-------#
+# Xterm #
+#-------#:
+xterm*background: black
+xterm*foreground: green
