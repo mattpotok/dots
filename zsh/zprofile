@@ -4,13 +4,13 @@
 #xmodmap ~/.Xmodmap
 
 if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
-    exec startx
+    exec startx &> ~/.Xlog
 fi
 
 #----------#
 # Keychain #
 #----------#
-if [[ -f $HOME/.ssh/id_ed25519 ]]; then
-    /usr/bin/keychain $HOME/.ssh/id_ed25519
-    source $HOME/.keychain/$HOST-sh
-fi
+#if [[ -f $HOME/.ssh/id_ed25519 ]]; then
+#    /usr/bin/keychain $HOME/.ssh/id_ed25519
+#    source $HOME/.keychain/$HOST-sh
+#fi

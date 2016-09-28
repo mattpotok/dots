@@ -17,12 +17,6 @@ function install_packages()
 {
 	printf "Installing packages\n"
 
-        # Add google-chrome repo
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | \
-            apt-key add - 
-        sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/stable main" >> \
-            /etc/apt/sources.list.d/google-chrome.list'
-
 	# Check for updates and apply
 	apt-get update && apt-get upgrade -y
 
@@ -35,7 +29,8 @@ function install_packages()
         apt-get install -y xorg i3 zsh
 
 	# Essentials
-	apt-get install -y dropbox google-chrome-stable vlc
+        apt-get install -y xbacklight
+	apt-get install -y nautilus-dropbox chromium vlc
 }
 
 # Link all dotfiles

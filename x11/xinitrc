@@ -1,11 +1,11 @@
-#----------#
-# Keyboard #
-#----------#
-setxbmap -layout us -variant dvp
-
 #-----------#
 # Resources #
 #-----------#
 xrdb -merge ~/.Xresources
 
+xbacklight -set 50
+
+#----#
+# I3 #
+#----#
 exec i3
