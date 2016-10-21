@@ -7,6 +7,11 @@ VISUAL=vim
 #-------#
 # PATHS #
 #-------#
-if [[ -d "$HOME/Programs/Go/bin" ]]; then
-  PATH="$PATH:$HOME/Programs/Go/bin"
+if [[ -d "$HOME/programs/go/bin" ]]; then
+  PATH="$PATH:$HOME/programs/go/bin"
+  export GOPATH="$HOME/programs/go/"
+fi
+
+if [[ -d "/opt/cisco/anyconnect/bin" ]]; then
+    PATH="$PATH:/opt/cisco/anyconnect/bin"
 fi

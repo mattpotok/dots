@@ -182,4 +182,7 @@ echo -e "$fg_bold[cyan] | |      | |                /'\_   _/\`\  "
 echo -e "$fg_bold[cyan] |_|      |_|                \___)=(___/  \n"
 echo -e "$fg_bold[blue]Today is:\t$fg_bold[green]`date`";
 echo -e "$fg_bold[blue]Kernel info:\t$fg_bold[green]`uname -smr`"
-echo -e "$fg_bold[blue]Uptime:\t\t$fg_bold[green]`uptime -p`\n"
+echo -e "$fg_bold[blue]Uptime:\t\t$fg_bold[green]`uptime -p`"
+echo -e "$fg_no_bold[green]"
+
+eval $(keychain --eval --nocolor --quiet id_ed25519) # Start keychain
