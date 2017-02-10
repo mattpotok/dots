@@ -63,6 +63,8 @@ set showcmd          " Shows current command being typed
 
 set noeb vb t_vb=    " Disables all error bells/flashes
 
+set shell=bash
+
 "-------------"
 " Indentation "
 "-------------"
@@ -164,3 +166,13 @@ augroup AutoSyntastic
   autocmd BufReadPost,FileReadPost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
   autocmd BufWritePost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
 augroup END
+
+"--------------"
+" Highlighting "
+"--------------"
+augroup vimrc_todo
+    au!
+    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|OPTIMIZE|XXX)/
+                      \ containedin=.*Comment,vimCommentTitle
+augroup END
+hi def link MyTodo Todo
