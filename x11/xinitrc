@@ -1,0 +1,11 @@
+#-----------#
+# Resources #
+#-----------#
+xrdb -merge ~/.Xresources
+
+xbacklight -set 50
+
+#----#
+# I3 #
+#----#
+exec i3

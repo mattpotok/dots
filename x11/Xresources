@@ -1,0 +1,7 @@
+!-------!
+! Xterm !
+!-------!
+xterm*background: black
+xterm*foreground: green
+
+xterm*faceName: DejaVu Sans Mono:size=10:antialias=true

@@ -1,4 +1,8 @@
 #--------------#
 # Key Bindings #
 #--------------#
-xmodmap ~/.Xmodmap
+#xmodmap ~/.Xmodmap
+
+if [[ -z $DISPLAY ]] && [[ $(tty) = /dev/tty1 ]]; then
+    exec startx &> ~/.Xlog
+fi

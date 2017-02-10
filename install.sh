@@ -9,23 +9,7 @@ function print_help()
   printf "Usage: sudo ./install [arguments]\n"
   printf "Arguments:\n"
   printf "  -h|--help    Print help (this message) and exit\n"
-  printf "  -s|--sshkey  Generates an ssh key and prints passphrase to console\n"
   exit 1
-}
-
-# Generate an ssh key along with a passphrase
-function generate_ssh_key()
-{
-	printf "Generating SSH key\n"
-
-	# Generate passphrase
-	PASSPHRASE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
-	printf "Passphrase: %s\n" "$PASSPHRASE"
-
-	#Generate key
-	ssh-keygen -t rsa -b 4096 -C "potok@mattpotok.com" -f "$HOME_DIR/.ssh/id_rsa" -P $PASSPHRASE
-	eval "$(ssh-agent -s)"
-	ssh-add $HOME_DIR/.ssh/id_rsa
 }
 
 # Install apt-get packages
@@ -40,11 +24,13 @@ function install_packages()
 	apt-get install -y build-essential cmake gdb libboost-all-dev
 	apt-get install -y golang
 	apt-get install -y python3-dev python3-pip
-	apt-get install -y vim-nox vim-youcompleteme
-	apt-get install -y git mosh zsh
+	apt-get install -y vim-nox
+	apt-get install -y git mosh keychain
+        apt-get install -y xorg i3 zsh
 
 	# Essentials
-	apt-get install -y dropbox google-chrome-stable vlc
+        apt-get install -y xbacklight
+	apt-get install -y nautilus-dropbox chromium vlc
 }
 
 # Link all dotfiles
@@ -52,9 +38,13 @@ function _link_dotfiles()
 {
 	printf "Linking dotfiles\n"
 
+        # Keyboard files
+        cp $HOME_DIR/.dotfiles/kbd/keyboard /etc/default/keyboard
+	ln -sf $HOME_DIR/.dotfiles/kbd/Xmodmap $HOME_DIR/.Xmodmap
+
+
 	# Misc files
 	ln -sf $HOME_DIR/.dotfiles/misc/gitconfig $HOME_DIR/.gitconfig
-	ln -sf $HOME_DIR/.dotfiles/misc/Xmodmap $HOME_DIR/.Xmodmap
 
 	# Vim files
 	ln -sf $HOME_DIR/.dotfiles/vim/vim $HOME_DIR/.vim
@@ -65,11 +55,15 @@ function _link_dotfiles()
 	vim +PluginInstall +qall
 	$HOME_DIR/.vim/bundle/youcompleteme/install.py --clang-completer --gocode-completer	
 
+        # X11 files
+        ln -sf $HOME_DIR/.dotfiles/x11/xinitrc $HOME_DIR/.xinitrc
+        ln -sf $HOME_DIR/.dotfiles/x11/Xresources $HOME_DIR/.Xresources
+
 	# Zsh files
 	ln -sf $HOME_DIR/.dotfiles/zsh/zshenv $HOME_DIR/.zshenv
 	ln -sf $HOME_DIR/.dotfiles/zsh/zprofile $HOME_DIR/.zprofile
 	ln -sf $HOME_DIR/.dotfiles/zsh/zshrc $HOME_DIR/.zshrc
-
+        
 	# Remove bash clutter
 	rm $HOME_DIR/.bash* 2> /dev/null
 	rm $HOME_DIR/.profile 2> /dev/null
@@ -93,9 +87,6 @@ for arg in "$@"; do
   case $arg in
     -h|--help)
       print_help
-      ;;
-  -s|--sshkey)
-      generate_ssh_key
       ;;
     *)
       ;;
