@@ -28,6 +28,8 @@ alias du='du -kh'   # Print readable output.
 alias df='df -kTh'  # Print readable output  
 alias vi='vim'      # Use vim rather than Vi
 
+# Custom
+
 
 #-----------#
 # Directory #

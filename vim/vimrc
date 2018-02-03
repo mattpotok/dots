@@ -31,7 +31,8 @@ Plugin 'potatoesmaster/i3-vim-syntax'     " i3 configuration
 Plugin 'hdima/python-syntax'              " Python
 
 " Syntax errors
-Plugin 'scrooloose/syntastic'
+Plugin 'w0rp/ale'
+Plugin 'maximbaz/lightline-ale'
 
 call vundle#end()
 filetype plugin indent on
@@ -39,8 +40,7 @@ filetype plugin indent on
 "--------"
 " Editor "
 "--------"
-set formatoptions-=o " Disable automatic comment insertion for 'o/O'
-set formatoptions-=r " Disable automatic comment insertion
+set formatoptions-=cro " Disable automatic comment insertion
 set fo+=t            " Auto-wrap text using textwidth
 set number           " Display line numbers
 set numberwidth=3    " Width of number column
@@ -92,34 +92,41 @@ set laststatus=2        " Display status line permanantly
 let g:bufferline_echo=0 " Allow buffer_line plugin to work with lightline
 
 " Configure status bar
+" \   'right': [['syntastic', 'lineinfo'], ['percent']]
+
+
 let g:lightline = {
-  \ 'colorscheme': 'wombat',
-  \
-  \ 'active': {
-  \   'left':  [['mode'], ['readonly'], ['bufferline']],
-  \   'right': [['syntastic', 'lineinfo'], ['percent']]
-  \ },
-  \
-  \ 'component_function': {
-  \   'readonly':   'LightLineReadonly',
-  \   'bufferline': 'LightLineBufferLine'
-  \ },
-  \
-  \ 'component_visible_condition': {
-  \   'readonly': '(&filetype!="help"&& &readonly)',
-  \ },
-  \
-  \ 'component_expand': {
-  \   'syntastic': 'SyntasticStatuslineFlag',
-  \ },
-  \
-  \ 'component_type': {
-  \   'syntastic': 'error',
-  \ },
-  \
-  \ 'separator': { 'left': '', 'right': '' },
-  \ 'subseparator': { 'left': '|', 'right': '|' }
-  \ }
+    \ 'colorscheme': 'wombat',
+    \
+    \ 'active': {
+    \   'left':  [['mode'], ['readonly'], ['bufferline']],
+    \   'right': [['linter_errors', 'linter_warnings', 'linter_ok', 'lineinfo'], ['percent']]
+    \ },
+    \
+    \ 'component_function': {
+    \   'readonly':   'LightLineReadonly',
+    \   'bufferline': 'LightLineBufferLine'
+    \ },
+    \
+    \ 'component_visible_condition': {
+    \   'readonly': '(&filetype!="help"&& &readonly)',
+    \ },
+    \
+    \ 'component_expand': {
+    \   'linter_warnings': 'lightline#ale#warnings',
+    \   'linter_errors': 'lightline#ale#errors',
+    \   'linter_ok': 'lightline#ale#ok',
+    \ },
+    \
+    \ 'component_type': {
+    \   'linter_warnings': 'warning',
+    \   'linter_errors': 'error',
+    \   'linter_ok': 'left',
+    \ },
+    \
+    \ 'separator': { 'left': '', 'right': '' },
+    \ 'subseparator': { 'left': '|', 'right': '|' }
+    \ }
 
 " Display read-only status indicator
 function! LightLineReadonly()
@@ -134,14 +141,11 @@ endfunction
 
 " Display buffer_line plugin information
 function! LightLineBufferLine()
-    let st=g:bufferline#refresh_status()
-    return g:bufferline_status_info.before . g:bufferline_status_info.current . g:bufferline_status_info.after
-endfunction
-
-" Display syntastic plugin errors
-function! s:LightLineSyntastic()
-  SyntasticCheck
-  call lightline#update()
+    call g:bufferline#refresh_status()
+    let b = g:bufferline_status_info.before
+    let c = g:bufferline_status_info.current
+    let a = g:bufferline_status_info.after
+    return b . c. a
 endfunction
 
 "------------"
@@ -149,18 +153,8 @@ endfunction
 "------------"
 let g:ycm_show_diagnostics_ui=0                 " Enable Syntantic to work
 let g:ycm_python_binary_path='/usr/bin/python3' " Enable Python3 completion
-let g:ycm_global_ycm_extra_conf='/home/potok/.vim/bundle/youcompleteme/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
-"------------"
-" Correction "
-"------------"
-let g:syntastic_always_populate_loc_list=1 " Load errors into the location list
-let g:syntastic_check_on_open=1            " Check for errors when opening
-let g:syntastic_mode_map = { 'mode': 'passive' }
-
-" Enable syntastic for status bar on reads/writes
-augroup AutoSyntastic
-  autocmd!
-  autocmd BufReadPost,FileReadPost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
-  autocmd BufWritePost *.c,*.cpp,*.py,*.go,*.sh call s:LightLineSyntastic()
-augroup END
+"----------"
+"  Linting "
+"----------"
+let g:ale_lint_on_text_changed = 'never'    " Lint only on file open/save

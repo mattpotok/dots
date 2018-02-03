@@ -7,6 +7,8 @@ VISUAL=vim
 #-------#
 # PATHS #
 #-------#
+PATH=$PATH:~/.local/bin
+
 if [[ -d "$HOME/programs/go/bin" ]]; then
   PATH="$PATH:$HOME/programs/go/bin"
   export GOPATH="$HOME/programs/go/"
@@ -14,4 +16,12 @@ fi
 
 if [[ -d "/opt/cisco/anyconnect/bin" ]]; then
     PATH="$PATH:/opt/cisco/anyconnect/bin"
+fi
+
+if [[ -d "$HOME/software/arduino-1.8.2/" ]]; then
+    PATH="$PATH:$HOME/software/arduino-1.8.2"
+fi
+
+if [[ -d "$HOME/software/miniconda3/bin" ]]; then
+    PATH="$PATH:$HOME/software/miniconda3/bin"
 fi
