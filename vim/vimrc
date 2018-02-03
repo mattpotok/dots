@@ -63,6 +63,8 @@ set showcmd          " Shows current command being typed
 
 set noeb vb t_vb=    " Disables all error bells/flashes
 
+set shell=bash
+
 "-------------"
 " Indentation "
 "-------------"
@@ -158,3 +160,13 @@ let g:ycm_python_binary_path='/usr/bin/python3' " Enable Python3 completion
 "  Linting "
 "----------"
 let g:ale_lint_on_text_changed = 'never'    " Lint only on file open/save
+
+"--------------"
+" Highlighting "
+"--------------"
+augroup vimrc_todo
+    au!
+    au Syntax * syn match MyTodo /\v<(FIXME|NOTE|TODO|OPTIMIZE|XXX)/
+                      \ containedin=.*Comment,vimCommentTitle
+augroup END
+hi def link MyTodo Todo
