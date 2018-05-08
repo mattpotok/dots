@@ -24,11 +24,12 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'bling/vim-bufferline'
 
 " Syntax coloring
-Plugin 'justinmk/vim-syntax-extra'        " C
-Plugin 'octol/vim-cpp-enhanced-highlight' " C++
-Plugin 'fatih/vim-go'                     " Golang
-Plugin 'potatoesmaster/i3-vim-syntax'     " i3 configuration
-Plugin 'hdima/python-syntax'              " Python
+Plugin 'justinmk/vim-syntax-extra'          " C
+Plugin 'octol/vim-cpp-enhanced-highlight'   " C++
+Plugin 'fatih/vim-go'                       " Golang
+Plugin 'potatoesmaster/i3-vim-syntax'       " i3 configuration
+Plugin 'hdima/python-syntax'                " Python
+Plugin 'rust-lang/rust.vim'                 " Rust 
 
 " Syntax errors
 Plugin 'w0rp/ale'
@@ -170,3 +171,8 @@ augroup vimrc_todo
                       \ containedin=.*Comment,vimCommentTitle
 augroup END
 hi def link MyTodo Todo
+
+"------------"
+" Languagues "
+"------------"
+"let g:rustfmt_autosave = 1

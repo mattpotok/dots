@@ -25,3 +25,7 @@ fi
 if [[ -d "$HOME/software/miniconda3/bin" ]]; then
     PATH="$PATH:$HOME/software/miniconda3/bin"
 fi
+
+if [[ -d "$HOME/.cargo/bin" ]]; then
+    PATH="$PATH:$HOME/.cargo/bin"
+fi
