@@ -11,7 +11,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Colorschemes
-Plugin 'flazz/vim-colorschemes'
+Plugin 'jonathanfilip/vim-lucius'
 
 " Completion
 Plugin 'valloric/youcompleteme'
@@ -24,10 +24,9 @@ Plugin 'itchyny/lightline.vim'
 Plugin 'bling/vim-bufferline'
 
 " Syntax coloring
-Plugin 'justinmk/vim-syntax-extra'          " C
-Plugin 'octol/vim-cpp-enhanced-highlight'   " C++
-Plugin 'fatih/vim-go'                       " Golang
+Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'potatoesmaster/i3-vim-syntax'       " i3 configuration
+Plugin 'pangloss/vim-javascript'            " Javascript
 Plugin 'hdima/python-syntax'                " Python
 Plugin 'rust-lang/rust.vim'                 " Rust 
 
@@ -41,30 +40,30 @@ filetype plugin indent on
 "--------"
 " Editor "
 "--------"
-set formatoptions-=cro " Disable automatic comment insertion
-set fo+=t            " Auto-wrap text using textwidth
-set number           " Display line numbers
-set numberwidth=3    " Width of number column
-set splitbelow       " Split (vertical)  new files below
-set splitright       " Split (horizontal) new files right
-set textwidth=80     " Width of the text
+set formatoptions-=cro  " Disable automatic comment insertion
+set fo+=t               " Auto-wrap text using textwidth
+set number              " Display line numbers
+set numberwidth=3       " Width of number column
+set splitbelow          " Split (vertical)  new files below
+set splitright          " Split (horizontal) new files right
+set textwidth=80        " Width of the text
 
-set t_ut=            " Use current background color
-set t_Co=256         " Number of colors
-syntax on            " Enable syntax highlighting
-colorscheme lucius   " Select colorscheme
-LuciusBlack          " Select colorscheme configuration
+set t_ut=               " Use current background color
+set t_Co=256            " Number of colors
+syntax on               " Enable syntax highlighting
+colorscheme lucius      " Select colorscheme
+LuciusBlack             " Select colorscheme configuration
 
-set hlsearch         " Highlight search queries
-set ignorecase       " Enable case-insensitive search
-set incsearch        " Find search query as it is typed
+set hlsearch            " Highlight search queries
+set ignorecase          " Enable case-insensitive search
+set incsearch           " Find search query as it is typed
 
-set cmdheight=1      " Set height of command window
-set showcmd          " Shows current command being typed
+set cmdheight=1         " Set height of command window
+set showcmd             " Shows current command being typed
 
-set noeb vb t_vb=    " Disables all error bells/flashes
+set noeb vb t_vb=       " Disables all error bells/flashes
 
-set shell=bash
+set shell=zsh           " Sets the shell
 
 "-------------"
 " Indentation "
@@ -97,7 +96,7 @@ let g:bufferline_echo=0 " Allow buffer_line plugin to work with lightline
 " Configure status bar
 " \   'right': [['syntastic', 'lineinfo'], ['percent']]
 
-
+" Configure status bar
 let g:lightline = {
     \ 'colorscheme': 'wombat',
     \
@@ -172,7 +171,14 @@ augroup vimrc_todo
 augroup END
 hi def link MyTodo Todo
 
+let g:cpp_class_scope_highlight=1
+let g:cpp_class_decl_highlight=1
+let g:cpp_member_variable_highlight=1
+let g:cpp_experimental_template_highlight = 1
+
+
 "------------"
 " Languagues "
 "------------"
 "let g:rustfmt_autosave = 1
+au BufRead,BufNewFile *.tpp setlocal filetype=cpp

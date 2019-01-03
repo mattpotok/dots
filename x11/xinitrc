@@ -7,6 +7,7 @@
 xrdb -merge ~/.Xresources
 
 xbacklight -set 30
+xset -b
 
 #----#
 # I3 #
