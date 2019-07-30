@@ -1,15 +1,19 @@
-#
-. /etc/X11/Xsession
+#!/bin/sh
+# Xorg configuration file.
 
-#-----------#
-# Resources #
-#-----------#
-xrdb -merge ~/.Xresources
+# Set keyboard
+setxkbmap \
+    -model 'pc105' \
+    -layout 'us(dvp),us' \
+    -option 'grp:win_space_toggle' \
+    -option 'caps:escape'
 
-xbacklight -set 30
-xset -b
+# Merge Xresources
+[ -f "$HOME/.Xresources" ] && xrdb -merge ~/.Xresources
 
-#----#
-# I3 #
-#----#
+# Appearance
+xbacklight -set 30  # Set backlight
+xset b off          # Turn bell off
+
+# Execute i3wm
 exec i3

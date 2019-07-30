@@ -2,8 +2,6 @@
 
 # Consult the keyboard(5) manual page.
 
-XKBMODEL="pc105"
-XKBLAYOUT="us(dvp),us"
-XKBOPTIONS="grp:ctrl_alt_toggle,terminate:ctrl_alt_bksp"
-
-BACKSPACE="guess"
+XKBMODEL='pc105'
+XKBLAYOUT='us(dvp),us'
+XKBOPTIONS='caps:escape,grp:win_space_toggle,terminate:ctrl_alt_bksp'

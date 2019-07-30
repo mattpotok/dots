@@ -27,7 +27,8 @@ Plugin 'bling/vim-bufferline'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'potatoesmaster/i3-vim-syntax'       " i3 configuration
 Plugin 'pangloss/vim-javascript'            " Javascript
-Plugin 'hdima/python-syntax'                " Python
+"Plugin 'hdima/python-syntax'                " Python
+Plugin 'vim-python/python-syntax'
 Plugin 'rust-lang/rust.vim'                 " Rust 
 
 " Syntax errors
@@ -156,10 +157,17 @@ endfunction
 let g:ycm_show_diagnostics_ui=0                 " Enable Syntantic to work
 let g:ycm_python_binary_path='/usr/bin/python3' " Enable Python3 completion
 
-"----------"
-"  Linting "
-"----------"
+"---------"
+" Linting "
+"---------"
 let g:ale_lint_on_text_changed = 'never'    " Lint only on file open/save
+
+""""" TESTING """"""
+" let g:ale_completion_enabled = 1
+" let g:ale_linters = {
+" \   'python': ['pyls'],
+" \}
+
 
 "--------------"
 " Highlighting "
@@ -171,11 +179,7 @@ augroup vimrc_todo
 augroup END
 hi def link MyTodo Todo
 
-let g:cpp_class_scope_highlight=1
-let g:cpp_class_decl_highlight=1
-let g:cpp_member_variable_highlight=1
-let g:cpp_experimental_template_highlight = 1
-
+let g:python_highlight_all = 1
 
 "------------"
 " Languagues "

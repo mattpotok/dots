@@ -77,7 +77,8 @@ setup_packages()
 
     # Install vim
     if [ $VIM = true ]; then
-        _setup_vim
+        #_setup_vim  FIXME
+        _setup_nvim
     fi
 
     # Install zsh
@@ -187,6 +188,45 @@ USER
 }
 
 ##############
+# _setup_neovim
+# Sets up vim
+# Globals:
+#   None
+# Arguments:
+#   None
+# Returns:
+#   None
+##############
+_setup_nvim()
+{
+    printf "Setting up Neovim.\n"
+
+    # Install packages
+    apt install neovim
+
+    apt install clang-tools
+    apt install python3-pyflakes python3-pycodestyle python3-pydocstyle
+
+
+su $SUDO_USER <<'USER'
+    # Install language specific packages
+    python3 -m pip install pyls
+
+    curl https://sh.rustup.rs -sSf | sh 
+    source $HOME/.cargo/env
+    rustup update
+    rustup component add rls rust-analysis rust-src
+
+    # Copy configuration
+    mkdir -p $HOME/.config/nvim
+    cp $HOME/.dotfiles/nvim/init.vim $HOME/.config/nvim/init.vim
+
+    # Setup plugins
+    nvim +PlugInstall +qall
+USER
+}
+
+##############
 # _setup_zsh
 # Sets up zsh
 # Globals:
@@ -269,4 +309,3 @@ fi
 
 # Setup packages
 setup_packages
-
