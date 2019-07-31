@@ -30,7 +30,7 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'maximbaz/lightline-ale'
 
     " Syntax
-    "Plug 'cespare/vim-toml'                     " TOML
+    Plug 'cespare/vim-toml'                     " TOML
     Plug 'mboughaba/i3config.vim'               " i3
     Plug 'octol/vim-cpp-enhanced-highlight'     " C++
     Plug 'pangloss/vim-javascript'              " Javascript
@@ -53,8 +53,7 @@ call plug#end()
     \}
 
     let g:ale_python_pyls_config =  { 'pyls': { 'plugins': { 'pydocstyle': { 'enabled': v:true } } }, }  " NOTE may need to set to v:false
-
-
+    
 " Bufferline plugin
     "let g:bufferline_rotate = 1
 

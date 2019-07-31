@@ -14,7 +14,7 @@ Steps to follow:
 5. Modify grub to remember last choice
   1. GRUB\_DEFAULT=saved  
      GRUB\_SAVEDEFAULT=true
-  3. Run `sudo update-grub` (may be in /usr/sbin)
+  2. Run `sudo update-grub` (may be in /usr/sbin)
 6. Clone `dotfiles` repository and setup
 
 

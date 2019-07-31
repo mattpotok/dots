@@ -102,7 +102,7 @@ _setup_i3()
     printf "Setting up I3.\n"
 
     # Install packages
-    apt install -y i3 xbacklight xorg
+    apt install -y i3 xbacklight xorg xrandr
 
     # TODO create an I3 config
 su $SUDO_USER <<'USER'
@@ -202,10 +202,10 @@ _setup_nvim()
     printf "Setting up Neovim.\n"
 
     # Install packages
-    apt install neovim
+    apt install -y neovim
 
-    apt install clang-tools
-    apt install python3-pyflakes python3-pycodestyle python3-pydocstyle
+    apt install -y clang-tools
+    apt install -y python3-pyflakes python3-pycodestyle python3-pydocstyle
 
 
 su $SUDO_USER <<'USER'
@@ -219,7 +219,7 @@ su $SUDO_USER <<'USER'
 
     # Copy configuration
     mkdir -p $HOME/.config/nvim
-    cp $HOME/.dotfiles/nvim/init.vim $HOME/.config/nvim/init.vim
+    cp $HOME/.dotfiles/config/nvim/init.vim $HOME/.config/nvim/init.vim
 
     # Setup plugins
     nvim +PlugInstall +qall

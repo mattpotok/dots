@@ -1,35 +1,15 @@
-#---------#
-# EXPORTS #
-#---------#
-# FIXME
-#EDITOR=vim
-#VISUAL=vim
+# Zsh environment file. Alway runs.
 
-#-------#
-# PATHS #
-#-------#
-PATH="$HOME/.local/bin:$PATH"
+# Exports
+export EDITOR="nvim"
+export BROWSER="firefox"
+export TERMINAL="urxvt"
 
-# FIXME remove this
-#if [[ -d "$HOME/programs/go/bin" ]]; then
-#  PATH="$PATH:$HOME/programs/go/bin"
-#  export GOPATH="$HOME/programs/go/"
-#fi
+# Default path
+PATH="/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin"
 
-# FIXME remove this
-if [[ -d "/opt/cisco/anyconnect/bin" ]]; then
-    PATH="$PATH:/opt/cisco/anyconnect/bin"
-fi
-
-if [[ -d "$HOME/software/arduino-1.8.2/" ]]; then
-    PATH="$PATH:$HOME/software/arduino-1.8.2"
-fi
-
-# FIXME remove this
-#if [[ -d "$HOME/software/miniconda3/bin" ]]; then
-#    PATH="$PATH:$HOME/software/miniconda3/bin"
-#fi
-
+# Custom Paths
 if [[ -d "$HOME/.cargo/bin" ]]; then
     PATH="$PATH:$HOME/.cargo/bin"
 fi
+
