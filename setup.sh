@@ -102,7 +102,7 @@ _setup_i3()
     printf "Setting up I3.\n"
 
     # Install packages
-    apt install -y i3 xbacklight xorg xrandr
+    apt install -y i3 xbacklight xorg arandr
 
     # TODO create an I3 config
 su $SUDO_USER <<'USER'
