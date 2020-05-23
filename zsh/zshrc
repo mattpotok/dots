@@ -121,7 +121,6 @@ SAVEHIST=10000              # History size
 setopt HIST_IGNORE_ALL_DUPS # Prevent duplicates by removing older repeats
 setopt HIST_IGNORE_SPACE    # Ignore all commands starting with a space
 setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks from command
-setopt SHARE_HISTORY        # Share history among all sessions
 
 #--------------#
 # Key bindings #

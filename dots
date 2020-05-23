@@ -1,0 +1,194 @@
+#!/bin/sh
+
+
+# dots_usage()
+# Prints usage for `dots`.
+usage() {
+cat <<'USAGE'
+Usage: sudo dots [-h | --help] <comand> [<args>]
+
+Commands:
+  install           Install saftware
+                    
+Optional arguments:
+  -h, --help        Prints this message and exits
+USAGE
+}
+
+# TODO verify [--i3] is valid
+# dots_install_usage()
+# Prints usage for `dots` install.
+usage_install() {
+cat <<'USAGE'
+Usage: sudo dots install [--clang] [-h | --help] [--i3] [--python] [--neovim]
+                         [--rust] [--vim] [--tmux] [--zsh]
+
+Optional arguments:
+      --clang       C/C++ packages
+  -h, --help        Prints this messages and exits
+      --i3          I3 window manager 
+      --python      Python3 packages
+      --neovim      NeoVim and plugins
+      --rust        Rust packages
+
+USAGE
+}
+
+##########################
+#          Main          #
+##########################
+# Check if have sudo permissions
+if [ $(id -u) -ne 0 ]; then
+    usage
+    exit 1
+fi
+
+# Initialize variables
+help=false
+
+# Parse options for `dots`
+while [ $(expr match "$1" "^-") -eq 1 ]; do
+    case "$1" in
+        -h | --help )
+            help=true
+            ;;
+        * )
+            echo "dots: invalid option: $1"
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+# Check if no options or help option
+if [ -z $1 ] || [ "$help" = true ]; then
+    usage
+    exit 0
+fi
+
+# Initialize `install` variables
+clang=false
+editor=""
+i3=false
+python=false
+rust=false
+tmux=false
+zsh=false
+
+# Parse options for command
+command=$1; shift
+case "$command" in
+    install )
+        # Check for options
+        if [ -z $1 ]; then
+            usage_install
+            exit 1
+        fi
+
+        # Parse options for `dots install`
+        while [ $(expr match "$1" "^-") -eq 1 ]; do
+            case "$1" in
+                -h | --help )
+                    help=true
+                    ;;
+
+                --clang )
+                    clang=true
+                    ;;
+
+                * )
+                    echo "dots install: invalid option: $1"
+                    usage
+                    exit 1
+                    ;;
+            esac
+            shift
+        done
+
+        ;;
+
+    * )
+        echo "dots: invalid command: $command"
+        usage
+        exit 1
+        ;;
+esac
+
+# Execute command
+if [ "$command" = "install" ]; then
+    if [ "$help" = true ]; then
+        usage_install
+        exit 0
+    fi
+
+    if [ "$clang" = true ]; then
+       echo "TODO" 
+    fi
+fi
+
+
+# exit 0
+# 
+# 
+# while getopts ":h" opt; do
+#     case ${opt} in
+#         h | help )
+#             help=true
+#             ;;
+#         \? )
+#             echo "dots: invalid option: -$OPTARG"
+#             usage
+#             exit 1
+#             ;;
+#     esac
+# done
+# shift $((OPTIND -1))
+# 
+# if [ -z $1 ] || [ "$help" = true ]; then
+#     usage
+#     exit 0
+# fi
+# 
+# # Initialize `install` variables
+# editor=""
+# 
+# 
+# # Parse options for sub-command
+# subcommand=$1; shift
+# case "$subcommand" in
+# 
+#     # Parse options for `install` sub-command
+#     install)
+#         while getopts ":h" opt; do
+#             case ${opt} in 
+#                 h )
+#                     help=true
+#                     ;;
+#                 \? )
+#                     echo "dots install: invalid option: -$OPTARG"
+#                     usage_install
+#                     exit 1
+#                     ;;
+#             esac
+#         done
+#         shift $((OPTIND -1))
+#         ;;
+# 
+#     \? )
+#         echo "TODO"
+#         exit 1
+#         ;;
+# esac
+# 
+# # Execute subcommand
+# if [ "$subcommand" = "install" ]; then
+#     if [ $OPTIND -eq 2 ] || [ "$help" = true ]; then
+#         usage_install
+#         exit 0
+#     fi
+# 
+#     if [ "$clang" = true ]; then
+#         
+#     fi
+# fi

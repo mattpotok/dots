@@ -204,7 +204,7 @@ _setup_nvim()
     # Install packages
     apt install -y neovim
 
-    apt install -y clang-tools
+    apt install -y clang-tools-8
     apt install -y python3-pyflakes python3-pycodestyle python3-pydocstyle
 
 
@@ -267,6 +267,9 @@ if [ $(id -u) -ne 0 ]; then
     usage
     exit 0
 fi
+
+# TODO update these! (possible create a sub-menu for install?
+# TODO get rid of the booleans and just call the function itself
 
 # Parse arguments
 while true; do
