@@ -43,38 +43,38 @@ call plug#end()
 " Ale plugin
     let g:ale_completion_enabled = 1
     let g:ale_lint_on_text_changed = 'never'  " Lint only on file open/save
-    let g:ale_fix_on_save = 1
+    let g:ale_fix_on_save = 1                 " Fix on file save
 
+    " Fixers
     let g:ale_fixers = {
+    \   'javascript': ['eslint'],
     \   'typescript': ['eslint'],
     \ }
 
+    " Linters
     let g:ale_linters = {
     \   'c': ['clangd'],
     \   'cpp': ['clangd', 'cpplint'],
+    \   'javascript': ['eslint', 'tsserver'],
     \   'python': ['pyls'],
     \   'rust': ['rls'],
     \   'typescript': ['eslint', 'tsserver'],
     \ }
 
-    " C
+    " C/C++
     let g:ale_c_parse_compile_commands = 1
     let g:ale_c_build_dir_names = ['build']
-    
-    " C++
-    let g:ale_cpp_clangd_executable = '/usr/bin/clangd-8'
-    
+
     " Python
-    let g:ale_python_pyls_executable = '/home/potok.matthew/.local/bin/pyls'
     let g:ale_python_pyls_config =  { 
-    \   'pyls': { 
-    \     'plugins': { 
+    \   'pyls': {
+    \     'plugins': {
     \       'pydocstyle': { 'enabled': v:true },
     \       'pylint': { 'enabled': v:true, 'args': ['--extension-pkg-whitelist=cv2'] }
-    \     } 
+    \     }
     \   },
-    \ } 
-    
+    \ }
+
 
 " Supertab plugin
     set completeopt=menu,menuone,preview,noselect,noinsert
@@ -131,16 +131,6 @@ call plug#end()
 
 " Numbering
     set number relativenumber
-
-    augroup numbertoggle
-        autocmd!
-        autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu | set rnu   | endif
-        autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
-    augroup END
-
-" Aurora settings
-    autocmd Filetype c setlocal sw=2 sts=2
-    autocmd Filetype cpp setlocal sw=2 sts=2
 
 " Status bar
     set laststatus=2        " Display status line permanantly
@@ -199,3 +189,7 @@ call plug#end()
         let a = g:bufferline_status_info.after
         return b . c . a
     endfunction
+
+" Language specific
+    autocmd Filetype c setlocal sw=2 sts=2
+    autocmd Filetype cpp setlocal sw=2 sts=2

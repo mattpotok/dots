@@ -1,194 +1,373 @@
 #!/bin/sh
+#
+# Utilities for setting up a fresh *nix image.
+
+########################################
+# Global variables
+########################################
+PM=""       # Package Manager
+
+########################################
+# Determine the package manager
+# Globals
+#  PM
+########################################
+get_package_manager() {
+    if [ -n $(which apt) ]; then
+        PM="apt"
+    elif [ -n $(which brew) ]; then
+        PM="brew"
+    elif [ -n $(which yum) ]; then
+        PM="yum"
+    fi
+}
+
+########################################
+# Update system packages
+# Globals
+#  PM
+########################################
+# TODO verify these
+update_system() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt update && sudo apt upgrade -y
+    elif [ "$PM" = "brew" ]; then
+        brew update && brew upgrade
+    elif [ "$PM" = "yum" ]; then
+        sudo yum update
+    fi
+}
 
 
-# dots_usage()
-# Prints usage for `dots`.
+########################################
+# Print usage for `dots`
+# Outputs:
+#   Writes `dots` usage to stdout
+########################################
 usage() {
 cat <<'USAGE'
 Usage: sudo dots [-h | --help] <comand> [<args>]
 
 Commands:
-  install           Install saftware
+  install           Install software
                     
 Optional arguments:
   -h, --help        Prints this message and exits
 USAGE
 }
 
-# TODO verify [--i3] is valid
-# dots_install_usage()
-# Prints usage for `dots` install.
+########################################
+# Print usage for `dots install`
+# Outputs:
+#   Writes `dots` usage to stdout
+########################################
 usage_install() {
 cat <<'USAGE'
-Usage: sudo dots install [--clang] [-h | --help] [--i3] [--python] [--neovim]
-                         [--rust] [--vim] [--tmux] [--zsh]
+Usage: sudo dots install [--clang] [--code] [--general] [-h | --help] [--i3]
+                         [--python] [--neovim] [--rust] [--vim] [--tmux] [--zsh]
 
 Optional arguments:
       --clang       C/C++ packages
+      --code        Software development packages
+      --general     General purpose packages
   -h, --help        Prints this messages and exits
       --i3          I3 window manager 
       --python      Python3 packages
       --neovim      NeoVim and plugins
       --rust        Rust packages
+      --tmux        Tmux configuration
+      --vim         Vim and plugins
+      --zsh         ZSH shell
 
 USAGE
 }
 
-##########################
-#          Main          #
-##########################
-# Check if have sudo permissions
-if [ $(id -u) -ne 0 ]; then
-    usage
-    exit 1
-fi
+########################################
+# Install clang
+# Globals
+#   PM
+########################################
+install_clang() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y build-essential clang clang-tools clangd cmake gdb valgrind
+    fi
+}
 
-# Initialize variables
-help=false
+########################################
+# Install development related packages
+# Globals
+#   PM
+########################################
+install_code() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y git
+    fi
+}
 
-# Parse options for `dots`
-while [ $(expr match "$1" "^-") -eq 1 ]; do
-    case "$1" in
-        -h | --help )
-            help=true
+########################################
+# Install general purpose packages
+# Globals
+#   PM
+########################################
+install_general() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y keychain feh vlc
+    fi
+}
+
+########################################
+# Install i3wm
+# Globals
+#   PM
+########################################
+install_i3() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y arandr i3 i3blocks xbacklight xorg
+    else
+        return
+    fi
+
+    cp $HOME/.dots/config/i3/config $HOME/.config/i3/config
+    cp $HOME/.dots/config/i3blocks/config $HOME/.config/i3blocks/config
+
+    cp $HOME/.dots/x11/xinitrc $HOME/.xinitrc
+    cp $HOME/.dots/x11/Xresources $HOME/.Xresources
+
+    cp $HOME/.dots/zsh/zprofile $HOME/.zprofile
+}
+
+########################################
+# Install Python
+# Globals
+#   PM
+########################################
+install_python() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y python3-dev
+    else
+        return
+    fi
+
+    python3 -m pip install 'python-language-server[all]'
+}
+
+########################################
+# Install NeoVim
+# Globals
+#   PM
+########################################
+install_neovim() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y neovim
+    else
+        return
+    fi
+
+    mkdir -p $HOME/.config/nvim
+    cp $HOME/.dots/config/nvim/init.vim $HOME/.config/nvim/init.vim
+    nvim +PlugInstall +qall
+}
+
+########################################
+# Install Rust
+# Globals
+#   PM
+########################################
+# TODO debug this
+install_rust () {
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    rustup update 
+
+    curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-linux -o ~/.local/bin/rust-analyzer
+    chmod +x ~/.local/bin/rust-analyzer
+}
+
+########################################
+# Install Tmux
+# Globals
+#   PM
+########################################
+install_tmux() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y tmux
+    else
+        return
+    fi
+
+    cp $HOME/.dots/misc/tmux.conf $HOME/.tmux.conf
+}
+
+########################################
+# Install Vim
+# Globals
+#   PM
+########################################
+install_vim() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y vim
+    else
+        return
+    fi
+
+    cp $HOME/.dots/vim/vimrc $HOME/.vimrc 
+    vim +PlugInstall +qall
+}
+
+########################################
+# Install ZSH
+# Globals
+#   PM
+########################################
+install_zsh() {
+    if [ "$PM" = "apt" ]; then
+        sudo apt install -y zsh
+    else
+        return
+    fi
+
+    cp $HOME/.dots/zsh/zshenv $HOME/.zshenv
+    cp $HOME/.dots/zsh/zshrc $HOME/.zshrc 
+
+    rm $HOME/.bash* 2> /dev/null
+    rm $HOME/.profile 2> /dev/null
+
+    chsh -s $(which zsh)
+}
+
+########################################
+# Main - parse options and execute commands
+# Globals:
+#   PM
+########################################
+main() {
+    # Initialize variables
+    local help=false
+
+    # Parse options for `dots`
+    while [ $(expr match "$1" "^-") -eq 1 ]; do
+        case "$1" in
+            -h | --help )
+                help=true
+                ;;
+            * )
+                echo "dots: invalid option: $1"
+                usage
+                exit 1
+                ;;
+        esac
+        shift
+    done
+
+    # Check if no options or help option
+    if [ -z $1 ] || [ "$help" = true ]; then
+        usage
+        exit 0
+    fi
+
+    # Initialize `install` variables
+    local install_clang=false
+    local install_code=false
+    local install_general=false
+    local install_i3=false
+    local install_python=false
+    local install_neovim=false
+    local install_rust=false
+    local install_tmux=false
+    local install_vim=false
+    local install_zsh=false
+
+    # Parse options for command
+    command=$1; shift
+    case "$command" in
+        install )
+            # Check for options
+            if [ -z $1 ]; then
+                usage_install
+                exit 1
+            fi
+
+            # Parse options for `dots install`
+            while [ -n "$1" ]; do
+                case "$1" in
+                    --clang )
+                        install_clang=true
+                        ;;
+
+                    --code )
+                        install_code=true
+                        ;;
+
+                    -h | --help )
+                        help=true
+                        ;;
+
+                    --general )
+                        install_general=true
+                        ;;
+
+                    --i3 )
+                        install_i3=true
+                        ;;
+
+                    --python )
+                        install_python=true
+                        ;;
+
+                    --neovim )
+                        install_neovim=true
+                        ;;
+
+                    --tmux )
+                        install_tmux=true
+                        ;;
+
+                    --vim )
+                        install_vim=true
+                        ;;
+
+                    --zsh )
+                        install_zsh=true
+                        ;;
+
+                    * )
+                        echo "dots install: invalid option: $1"
+                        usage_install
+                        exit 1
+                        ;;
+                esac
+                shift
+            done
+
             ;;
+
         * )
-            echo "dots: invalid option: $1"
+            echo "dots: invalid command: $command"
             usage
             exit 1
             ;;
     esac
-    shift
-done
 
-# Check if no options or help option
-if [ -z $1 ] || [ "$help" = true ]; then
-    usage
-    exit 0
-fi
-
-# Initialize `install` variables
-clang=false
-editor=""
-i3=false
-python=false
-rust=false
-tmux=false
-zsh=false
-
-# Parse options for command
-command=$1; shift
-case "$command" in
-    install )
-        # Check for options
-        if [ -z $1 ]; then
+    # Execute command
+    if [ "$command" = "install" ]; then
+        if [ "$help" = true ]; then
             usage_install
-            exit 1
+            exit 0
         fi
 
-        # Parse options for `dots install`
-        while [ $(expr match "$1" "^-") -eq 1 ]; do
-            case "$1" in
-                -h | --help )
-                    help=true
-                    ;;
+        get_package_manager
+        update_system
 
-                --clang )
-                    clang=true
-                    ;;
-
-                * )
-                    echo "dots install: invalid option: $1"
-                    usage
-                    exit 1
-                    ;;
-            esac
-            shift
-        done
-
-        ;;
-
-    * )
-        echo "dots: invalid command: $command"
-        usage
-        exit 1
-        ;;
-esac
-
-# Execute command
-if [ "$command" = "install" ]; then
-    if [ "$help" = true ]; then
-        usage_install
-        exit 0
+        [ "$install_clang" = true ]   && install_clang
+        [ "$install_code" = true ]    && install_code
+        [ "$install_general" = true ] && install_general
+        [ "$install_i3" = true ]      && install_i3
+        [ "$install_python" = true ]  && install_python
+        [ "$install_neovim" = true ]  && install_neovim
+        [ "$install_rust" = true ]    && install_rust
+        [ "$install_tmux" = true ]    && install_tmux
+        [ "$install_vim" = true ]     && install_vim
+        [ "$install_zsh" = true ]     && install_zsh
     fi
+}
 
-    if [ "$clang" = true ]; then
-       echo "TODO" 
-    fi
-fi
-
-
-# exit 0
-# 
-# 
-# while getopts ":h" opt; do
-#     case ${opt} in
-#         h | help )
-#             help=true
-#             ;;
-#         \? )
-#             echo "dots: invalid option: -$OPTARG"
-#             usage
-#             exit 1
-#             ;;
-#     esac
-# done
-# shift $((OPTIND -1))
-# 
-# if [ -z $1 ] || [ "$help" = true ]; then
-#     usage
-#     exit 0
-# fi
-# 
-# # Initialize `install` variables
-# editor=""
-# 
-# 
-# # Parse options for sub-command
-# subcommand=$1; shift
-# case "$subcommand" in
-# 
-#     # Parse options for `install` sub-command
-#     install)
-#         while getopts ":h" opt; do
-#             case ${opt} in 
-#                 h )
-#                     help=true
-#                     ;;
-#                 \? )
-#                     echo "dots install: invalid option: -$OPTARG"
-#                     usage_install
-#                     exit 1
-#                     ;;
-#             esac
-#         done
-#         shift $((OPTIND -1))
-#         ;;
-# 
-#     \? )
-#         echo "TODO"
-#         exit 1
-#         ;;
-# esac
-# 
-# # Execute subcommand
-# if [ "$subcommand" = "install" ]; then
-#     if [ $OPTIND -eq 2 ] || [ "$help" = true ]; then
-#         usage_install
-#         exit 0
-#     fi
-# 
-#     if [ "$clang" = true ]; then
-#         
-#     fi
-# fi
+main "$@"

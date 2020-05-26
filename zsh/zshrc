@@ -1,6 +1,6 @@
-#---------#
+########################################
 # Aliases #
-#---------#
+########################################
 # Directory
 alias ds='dirs -v'      # Alias director stack
 alias mkdir='mkdir -p'  # Create parent by default
@@ -17,7 +17,6 @@ alias lt='ls -ltr'  # Sort by date, recent last.
 alias lc='ls -ltcr' # Sort by change time, recent last.
 alias lu='ls -ltur' # Sort by access time, recent last.
 
-
 # Typos
 alias ch='cd' # 'cd' typo
 alias gd='cd' # 'cd' typo
@@ -28,12 +27,10 @@ alias du='du -kh'   # Print readable output.
 alias df='df -kTh'  # Print readable output  
 alias vi='vim'      # Use vim rather than Vi
 
-# Custom
 
-
-#-----------#
-# Directory #
-#-----------#
+########################################
+# Directory
+########################################
 DIRSTACKSIZE=16           # Set the directory stack size
 
 setopt AUTO_CD            # 'cd' without the cd
@@ -44,64 +41,62 @@ setopt PUSHD_SILENT       # Push silently unto the stack
 setopt PUSHD_TO_HOME      # Allow $HOME to be pushed
 
 
-#-----------#
+########################################
 # Functions #
-#-----------#
+########################################
+# `cd` into a project
+function cdp() { cd ~/Projects/$1 }
+
 # Return branch of the repository if it exists
-function _parse_git_branch 
-{
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+function _parse_git_branch() {
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
     echo "("${ref#refs/heads/}")"
 }
 
 # Extract compressed files
-function extract()
-{
-  if [ -f $1 ]; then
-    case $1 in 
-      *.tar.bz2)  tar xvjf $1    ;;
-      *.tar.gz)   tar xvzf $1    ;;
-      *.bz2)      bunzip2 $1     ;;
-      *.rar)      unrar x $1     ;;
-      *.gz)       gunzip $1      ;;
-      *.tar)      tar xvf $1     ;;
-      *.tgz)      tar xvzf $1    ;;
-      *.zip)      unzip $1       ;;
-      *.Z)        uncompress $1  ;;
-      *.7z)       7z x $1        ;;
-      *)          echo "Don't know how to extract '$1'..."  ;;
-    esac
-  else
-    echo "'$1' is not a valid file!"
-  fi
+function extract() {
+    if [ -f $1 ]; then
+        case $1 in 
+            *.tar.bz2)  tar xvjf $1    ;;
+            *.tar.gz)   tar xvzf $1    ;;
+            *.bz2)      bunzip2 $1     ;;
+            *.rar)      unrar x $1     ;;
+            *.gz)       gunzip $1      ;;
+            *.tar)      tar xvf $1     ;;
+            *.tgz)      tar xvzf $1    ;;
+            *.zip)      unzip $1       ;;
+            *.Z)        uncompress $1  ;;
+            *.7z)       7z x $1        ;;
+            *)          echo "Don't know how to extract '$1'..."  ;;
+        esac
+    else
+        echo "'$1' is not a valid file!"
+    fi
 }
 
 # Generate ssh-key
-function gen_sshkey()
-{
-	# Generate passphrase
-	local passphrase=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
-	echo $passphrase >> passphrase.txt
+function gen_sshkey() {
+    # Generate passphrase
+    local passphrase=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
+    echo $passphrase >> passphrase.txt
 
-	#Generate key
-	ssh-keygen -o -a 100 -t ed25519 -C "potok@mattpotok.com" -f "$HOME/.ssh/id_ed25519" -P $passphrase
+    #Generate key
+    ssh-keygen -o -a 100 -t ed25519 -C "potok@mattpotok.com" -f "$HOME/.ssh/id_ed25519" -P $passphrase
 }
 
 # Get IP address
-function getip()
-{
-  in_ip=$(hostname -I | cut -d' ' -f1)
-  ex_ip=$(wget http://ipinfo.io/ip -qO -)
+function getip() {
+    in_ip=$(hostname -I | cut -d' ' -f1)
+    ex_ip=$(wget http://ipinfo.io/ip -qO -)
 
-  echo "internal ip: ${in_ip}"
-  echo "external ip: ${ex_ip}"
+    echo "internal ip: ${in_ip}"
+    echo "external ip: ${ex_ip}"
 }
 
 # Make and cd into a directory
-function mkcd()
-{
-  mkdir -p $1
-  cd $1
+function mkcd() {
+    mkdir -p $1
+    cd $1
 }
 
 # Create archives
@@ -111,9 +106,10 @@ function mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
 function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 function mkzip() { zip -r   "${1%%/}.zip"     "${1%%/}/"; }
 
-#---------#
-# History #
-#---------#
+
+########################################
+# History
+########################################
 HISTFILE=~/.histfile        # History file location 
 HISTSIZE=10000              # History size
 SAVEHIST=10000              # History size
@@ -122,24 +118,25 @@ setopt HIST_IGNORE_ALL_DUPS # Prevent duplicates by removing older repeats
 setopt HIST_IGNORE_SPACE    # Ignore all commands starting with a space
 setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks from command
 
-#--------------#
-# Key bindings #
-#--------------#
+
+########################################
+# Key bindings
+########################################
 bindkey -v                            # Enable Vi keybindings
 bindkey -v '^?' backward-delete-char  # Normal deletion
 
 
-#---------#
-# Modules #
-#---------#
+########################################
+# Modules
+########################################
 autoload -Uz colors compinit
 colors
 compinit
 
 
-#--------#
-# Prompt #
-#--------#
+########################################
+# Prompt
+########################################
 fgbk="$fg_bold[black]"
 fgbl="$fg_bold[blue]"
 fgbg="$fg_bold[green]"
@@ -152,9 +149,9 @@ PROMPT="%{$fgbk%}[%{$fgc%}%n%{$fgbk%}@%{$fgc%}%m%{$fgbk%}: \
 setopt PROMPT_SUBST
 
 
-#-----------#
-# Usability #
-#-----------#
+########################################
+# Usability
+########################################
 setopt ALWAYS_TO_END    # Move cursor to end after completion
 setopt COMPLETE_IN_WORD # Enable mid-word completion
 setopt CORRECT          # Correct the spelling of commands
@@ -170,9 +167,9 @@ setopt NO_FLOW_CONTROL  # Reclaim ^S/^Q
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive
  
 
-#---------#
-# Welcome #
-#---------#
+########################################
+# Welcome
+########################################
 clear
 echo -e "$fg_bold[cyan]                                 .--.      "
 echo -e "$fg_bold[cyan] ____    ___  _______           |o_o |     "
@@ -186,4 +183,6 @@ echo -e "$fg_bold[blue]Kernel info:\t$fg_bold[green]`uname -smr`"
 echo -e "$fg_bold[blue]Uptime:\t\t$fg_bold[green]`uptime -p`"
 echo -e "$fg_no_bold[green]"
 
-eval $(keychain --eval --nocolor --quiet id_ed25519) # Start keychain
+if [ -n $(which keychain) ]; then
+    eval $(keychain --eval --nocolor --quiet id_ed25519) # Start keychain
+fi
