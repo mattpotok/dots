@@ -1,5 +1,3 @@
-TODO make sure all stuff is less that 80 width
-
 # Debian
 
 An outline of how to setup a fresh minimal Debian install.
@@ -7,16 +5,25 @@ An outline of how to setup a fresh minimal Debian install.
 ## Setup Process
 
 Steps to follow:
-1. Change keyboard to programmer Dvorak (dvp) `dpkg-reconfigure keyboard configuration`
-2. Install sudo `apt install git neovim sudo`
-3. Add `<USER>` to sudoers via visudo `/usr/sbin'
-4. Modify `/etc/apt/sources.list` from `<release>' to 'testing' and add `contrib non-free`
+1. Configure keyboard:
+   ```sh
+   setxkbmap \
+       -model 'pc105' \
+       -layout 'us(dvp),us' \
+       -option 'grp:win_space_toggle' \
+       -option 'caps:escape'
+   ```
+2. Install minimal set of packages: `sudo apt install git neovim sudo`
+3. Add `$USER` to sudoers with `sudo visudo` (may be in /usr/sbin)
+4. Modify `/etc/apt/sources.list` from `<release>` to `testing`
+   and add `contrib non-free`
 5. Modify grub to remember last choice
-  1. GRUB\_DEFAULT=saved  
+  1. GRUB\_DEFAULT=saved
      GRUB\_SAVEDEFAULT=true
   2. Run `sudo update-grub` (may be in /usr/sbin)
 6. Clone `dotfiles` repository and setup
 
+## TODO
 
 New ones:
 login to root and configure xorg: X -configure and then cp /root/xorg.conf.new

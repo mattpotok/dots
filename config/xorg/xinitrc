@@ -1,12 +1,12 @@
 #!/bin/sh
 # Xorg configuration file.
 
-# Set keyboard
-setxkbmap \
-    -model 'pc105' \
-    -layout 'us(dvp),us' \
-    -option 'grp:win_space_toggle' \
-    -option 'caps:escape'
+# Set keyboard for xorg session
+# setxkbmap \
+#     -model 'pc105' \
+#     -layout 'us(dvp),us' \
+#     -option 'grp:win_space_toggle' \
+#     -option 'caps:escape'
 
 # Merge Xresources
 [ -f "$HOME/.Xresources" ] && xrdb -merge ~/.Xresources

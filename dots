@@ -5,7 +5,11 @@
 ########################################
 # Global variables
 ########################################
-PM=""       # Package Manager
+# Canonical path to `dots` script directory
+DIR=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
+
+PM=""  # Package Manager
+
 
 ########################################
 # Determine the package manager
@@ -38,7 +42,6 @@ update_system() {
     fi
 }
 
-
 ########################################
 # Print usage for `dots`
 # Outputs:
@@ -63,10 +66,12 @@ USAGE
 ########################################
 usage_install() {
 cat <<'USAGE'
-Usage: sudo dots install [--clang] [--code] [--general] [-h | --help] [--i3]
-                         [--python] [--neovim] [--rust] [--vim] [--tmux] [--zsh]
+Usage: sudo dots install [--all] [--clang] [--code] [--general] [-h | --help]
+                         [--i3] [--python] [--neovim] [--rust] [--vim] [--tmux]
+                         [--zsh]
 
 Optional arguments:
+      --all         All packages
       --clang       C/C++ packages
       --code        Software development packages
       --general     General purpose packages
@@ -118,27 +123,38 @@ install_general() {
 ########################################
 # Install i3wm
 # Globals
+#   DIR
 #   PM
 ########################################
 install_i3() {
     if [ "$PM" = "apt" ]; then
-        sudo apt install -y arandr i3 i3blocks xbacklight xorg
+        sudo apt install -y arandr i3 i3blocks xautolock xbacklight xorg
     else
         return
     fi
 
-    cp $HOME/.dots/config/i3/config $HOME/.config/i3/config
-    cp $HOME/.dots/config/i3blocks/config $HOME/.config/i3blocks/config
+    # Copy configuration files
+    cp $DIR/config/i3/config $HOME/.config/i3/config
+    cp $DIR/config/i3blocks/config $HOME/.config/i3blocks/config
 
-    cp $HOME/.dots/x11/xinitrc $HOME/.xinitrc
-    cp $HOME/.dots/x11/Xresources $HOME/.Xresources
+    cp $DIR/config/xorg/xinitrc $HOME/.xinitrc
+    cp $DIR/config/xorg/Xresources $HOME/.Xresources
+    sudo cp $DIR/config/xorg/keyboard /etc/default/keyboard
 
-    cp $HOME/.dots/zsh/zprofile $HOME/.zprofile
+    cp $DIR/config/zsh/zprofile $HOME/.zprofile
+
+    # Configure lock screen
+    cp $DIR/bin/lockscreen $HOME/.local/bin
+    sudo sh -c \
+        "sed 's/{user}/'\"$USER\"'/g' $DIR/config/systemd/lockscreen.service > \
+        /etc/systemd/system/lockscreen.service"
+    sudo systemctl enable lockscreen.service
 }
 
 ########################################
 # Install Python
 # Globals
+#   DIR
 #   PM
 ########################################
 install_python() {
@@ -154,6 +170,7 @@ install_python() {
 ########################################
 # Install NeoVim
 # Globals
+#   DIR
 #   PM
 ########################################
 install_neovim() {
@@ -164,7 +181,7 @@ install_neovim() {
     fi
 
     mkdir -p $HOME/.config/nvim
-    cp $HOME/.dots/config/nvim/init.vim $HOME/.config/nvim/init.vim
+    cp $DIR/config/nvim/init.vim $HOME/.config/nvim/init.vim
     nvim +PlugInstall +qall
 }
 
@@ -185,6 +202,7 @@ install_rust () {
 ########################################
 # Install Tmux
 # Globals
+#   DIR
 #   PM
 ########################################
 install_tmux() {
@@ -194,12 +212,13 @@ install_tmux() {
         return
     fi
 
-    cp $HOME/.dots/misc/tmux.conf $HOME/.tmux.conf
+    cp $DIR/config/tmux/tmux.conf $HOME/.tmux.conf
 }
 
 ########################################
 # Install Vim
 # Globals
+#   DIR
 #   PM
 ########################################
 install_vim() {
@@ -209,13 +228,14 @@ install_vim() {
         return
     fi
 
-    cp $HOME/.dots/vim/vimrc $HOME/.vimrc 
+    cp $DIR/vim/vimrc $HOME/.vim/vimrc 
     vim +PlugInstall +qall
 }
 
 ########################################
 # Install ZSH
 # Globals
+#   DIR
 #   PM
 ########################################
 install_zsh() {
@@ -225,8 +245,8 @@ install_zsh() {
         return
     fi
 
-    cp $HOME/.dots/zsh/zshenv $HOME/.zshenv
-    cp $HOME/.dots/zsh/zshrc $HOME/.zshrc 
+    cp $DIR/zsh/zshenv $HOME/.zshenv
+    cp $DIR/zsh/zshrc $HOME/.zshrc 
 
     rm $HOME/.bash* 2> /dev/null
     rm $HOME/.profile 2> /dev/null
@@ -289,6 +309,19 @@ main() {
             # Parse options for `dots install`
             while [ -n "$1" ]; do
                 case "$1" in
+                    --all )
+                        install_clang=true
+                        install_code=true
+                        install_general=true
+                        install_i3=true
+                        install_python=true
+                        install_neovim=true
+                        install_rust=true
+                        install_tmux=true
+                        install_vim=true
+                        install_zsh=true
+                        ;;
+
                     --clang )
                         install_clang=true
                         ;;

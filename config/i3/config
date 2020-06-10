@@ -162,6 +162,27 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Lock screen
+bindsym $mod+Control+l exec lockscreen
+exec --no-startup-id xautolock -time 15 -locker 'lockscreen' &
+
+# Power management
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) poweroff
+mode "$mode_system" {
+    bindsym l exec --no-startup-id lockscreen mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+
+    # Exit mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Delete mode "$mode_system"
+
+
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {

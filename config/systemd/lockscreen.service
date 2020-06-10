@@ -1,0 +1,12 @@
+[Unit]
+Description=Lock screen before suspend/hibernate
+Before=sleep.target
+
+[Service]
+User=potok
+Type=forking
+Environment=DISPLAY=:0
+ExecStart=/home/{user}/.local/bin/lockscreen
+
+[Install]
+WantedBy=sleep.target

@@ -1,12 +1,12 @@
-!-------!
-! Xterm !
-!-------!
-!! Appearance
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Xterm
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Appearance
 xterm*background: black
 xterm*foreground: green
 xterm*faceName: DejaVu Sans Mono:size=10:antialias=true
 
-!! (Copy/paste) with Ctrl+Shift+(C/V)
+! (Copy/paste) with Ctrl+Shift+(C/V)
 xterm*selectToClipboard: true
 xterm*VT100.Translations: #override \
     Shift <Key>Insert:    insert-selection(SELECT) \n\
@@ -15,14 +15,14 @@ xterm*VT100.Translations: #override \
     Ctrl Shift <Key>C:    copy-selection(SELECT)
 
 
-!-------!
-! URxvt !
-!-------!
-!! Disable ISO mode bindings (Ctrl+Shift)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! URxvt
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! Disable ISO mode bindings (Ctrl+Shift)
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 
-!! Appearance
+! Appearance
 URxvt.scrollBar: false
 
 URxvt.background: black
@@ -31,12 +31,18 @@ URxvt.foreground: green
 URxvt.font: xft:DejaVu Sans Mono:pixelsize=14:antialias=true
 URxvt.letterSpace: -1
 
-!! Scrolling options
+! Copy, paste
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Meta-c: builtin-string:
+URxvt.keysym.Control-Meta-v: builtin-string:
+
+! Scrolling options
 URxvt.scrollTtyOutput: false
 URxvt.scrollWithBuffer: true
 URxvt.scrollTtyKeypress: true
 
-!! Colors
+! Colors
 URxvt*color0:  #000000 // black
 URxvt*color1:  #B40000 // red
 URxvt*color2:  #00AA00 // green
