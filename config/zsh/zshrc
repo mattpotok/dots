@@ -45,7 +45,16 @@ setopt PUSHD_TO_HOME      # Allow $HOME to be pushed
 # Functions #
 ########################################
 # `cd` into a project
-function cdp() { cd ~/Projects/$1 }
+function cdp() {
+    result=$(cdp_helper $@)
+    exit_code=$?
+
+    if [ $exit_code -ne 0 ]; then
+        echo $result
+    fi
+
+    cd $result
+}
 
 # Return branch of the repository if it exists
 function _parse_git_branch() {
@@ -170,6 +179,10 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' # Case insensitive
 ########################################
 # Welcome
 ########################################
+if [ -x "$(command -v upspan)" ]; then
+    up="$fg_bold[blue]Uptime:\t\t$fg_bold[green]`upspan`"
+fi
+
 clear
 echo -e "$fg_bold[cyan]                                 .--.      "
 echo -e "$fg_bold[cyan] ____    ___  _______           |o_o |     "
@@ -180,7 +193,7 @@ echo -e "$fg_bold[cyan] | |      | |                /'\_   _/\`\  "
 echo -e "$fg_bold[cyan] |_|      |_|                \___)=(___/  \n"
 echo -e "$fg_bold[blue]Today is:\t$fg_bold[green]`date`";
 echo -e "$fg_bold[blue]Kernel info:\t$fg_bold[green]`uname -smr`"
-echo -e "$fg_bold[blue]Uptime:\t\t$fg_bold[green]`uptime -p`"
+[ ${up+.} ] && echo -e "$up"
 echo -e "$fg_no_bold[green]"
 
 if [ -n $(which keychain) ]; then

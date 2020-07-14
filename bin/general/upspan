@@ -1,0 +1,71 @@
+#!/bin/python3
+"""Compute the span of time the system has been up"""
+
+import sys
+from typing import Tuple
+
+# Constants
+LINUX_UPTIME_PATH = '/proc/uptime'
+
+SECOND = 1
+MINUTE = SECOND * 60
+HOUR = MINUTE * 60
+DAY = HOUR * 24
+WEEK = DAY * 7
+YEAR = WEEK * 52
+DECADE = YEAR * 10
+CENTURY = DECADE * 10
+
+
+def compute_up_span(up: int) -> str:
+    """Convert up time to a human readable string
+
+    Args:
+        up: system up time
+
+    Returns:
+        A string representing the up time in human readable format.
+    """
+    intervals = [CENTURY, DECADE, YEAR, WEEK, DAY, HOUR, MINUTE, SECOND]
+    units = [
+        ('century', 'centuries'), ('decade', 'decades'), ('year', 'years'),
+        ('week', 'weeks'), ('day', 'days'), ('hour', 'hours'),
+        ('minute', 'minutes'), ('second', 'seconds')
+    ]
+
+    span = []
+    for (interval, (singular, plural)) in zip(intervals, units):
+        value = up // interval
+        up = up - (value * interval)
+        if value > 0:
+            unit = singular if value == 1 else plural
+            span.append(f'{value} {unit}')
+    span_str = ', '.join(span)
+
+    return f'Up {span_str}'
+
+
+def get_system_up_time() -> Tuple[str, int]:
+    """Return the up time of the system"""
+    if (os := sys.platform) == 'linux':
+        try:
+            with open(LINUX_UPTIME_PATH, 'r') as file:
+                data = file.read().strip().split()
+                return ('', int(float(data[0])))
+        except FileNotFoundError:
+            return (f'File {LINUX_UPTIME_PATH} not found', 0)
+
+    elif os == 'darwin' or 'bsd' in os:
+        return ('', 0)
+
+    else:
+        return (f"Unsupported OS '{os}'", 0)
+
+
+if __name__ == '__main__':
+    (err, up) = get_system_up_time()
+    if err:
+        print(err)
+        sys.exit(1)
+
+    print(compute_up_span(up))

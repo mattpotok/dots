@@ -116,8 +116,11 @@ install_code() {
 ########################################
 install_general() {
     if [ "$PM" = "apt" ]; then
-        sudo apt install -y keychain feh vlc
+        sudo apt install -y keychain feh trash-cli vlc
     fi
+
+    # TODO test this
+    cp $DIR/bin/general/* $HOME/.local/bin
 }
 
 ########################################
@@ -135,6 +138,7 @@ install_i3() {
 
     # Copy configuration files
     cp $DIR/config/i3/config $HOME/.config/i3/config
+    mkdir -p $HOME/.config/i3blocks
     cp $DIR/config/i3blocks/config $HOME/.config/i3blocks/config
 
     cp $DIR/config/xorg/xinitrc $HOME/.xinitrc
@@ -143,8 +147,9 @@ install_i3() {
 
     cp $DIR/config/zsh/zprofile $HOME/.zprofile
 
-    # Configure lock screen
-    cp $DIR/bin/lockscreen $HOME/.local/bin
+    cp $DIR/bin/i3/* $HOME/.local/bin
+
+    # Configure screen locking
     sudo sh -c \
         "sed 's/{user}/'\"$USER\"'/g' $DIR/config/systemd/lockscreen.service > \
         /etc/systemd/system/lockscreen.service"
@@ -164,7 +169,7 @@ install_python() {
         return
     fi
 
-    python3 -m pip install 'python-language-server[all]'
+    python3 -m pip install mypy 'python-language-server[all]'
 }
 
 ########################################
@@ -190,7 +195,6 @@ install_neovim() {
 # Globals
 #   PM
 ########################################
-# TODO debug this
 install_rust () {
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     rustup update 
@@ -245,8 +249,8 @@ install_zsh() {
         return
     fi
 
-    cp $DIR/zsh/zshenv $HOME/.zshenv
-    cp $DIR/zsh/zshrc $HOME/.zshrc 
+    cp $DIR/config/zsh/zshenv $HOME/.zshenv
+    cp $DIR/config/zsh/zshrc $HOME/.zshrc
 
     rm $HOME/.bash* 2> /dev/null
     rm $HOME/.profile 2> /dev/null
@@ -342,12 +346,16 @@ main() {
                         install_i3=true
                         ;;
 
+                    --neovim )
+                        install_neovim=true
+                        ;;
+
                     --python )
                         install_python=true
                         ;;
 
-                    --neovim )
-                        install_neovim=true
+                    --rust )
+                        install_rust=true
                         ;;
 
                     --tmux )

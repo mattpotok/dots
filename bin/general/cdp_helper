@@ -1,0 +1,146 @@
+#!/usr/bin/env python3
+"""`cd` into a particular project"""
+
+import pathlib
+import sys
+from typing import List
+
+# Constants
+PROJECTS_PATH = pathlib.Path.home() / 'Projects'
+
+
+def find_matching_project(search: str) -> str:
+    """Find the closest matching project to search query.
+
+    The matching algorithm finds the 'closest' matching projects by checking if
+    `search` is a substring of any projects and sorting matches alphabetically.
+    If no matches were found, it sorts all project based on the Levenshtien
+    distance from `search`. Afterwards, it allows a user to make a choice from
+    the sorted projects.
+
+    Args:
+        search: the query project
+
+    Returns:
+        A project of choice.
+    """
+    projects = [p.name for p in PROJECTS_PATH.iterdir() if p.is_dir()]
+
+    # Search for matching (sub)string
+    matches = []
+    for project in projects:
+        if search in project:
+            matches.append(project)
+
+    if (length := len(matches)) == 1:
+        return matches[0]
+    elif length > 1:
+        matches.sort()
+        return select_matching_project(matches)
+
+    # Search for closest matching project
+    distances = []
+    for project in projects:
+        distance = levenshtein(search, project)
+        distances.append((distance, project))
+
+    distances.sort()
+    matches = [elem[1] for elem in distances]
+    return select_matching_project(matches)
+
+
+def levenshtein(x: str, y: str) -> int:
+    """Compute the Leveshtein distance.
+
+    Args:
+        x,y: strings to compare
+
+    Return:
+        The Levenshtein distance between the inputs.
+    """
+    # Check base cases
+    if not x and not y:
+        return 0
+    elif not x:
+        return len(y)
+    elif not y:
+        return len(x)
+
+    # Initialize variables
+    (s, t) = (' ' + x, ' ' + y)  # Add ' ' to handle '-1' in index
+    arr = [[0 for col in range(len(t))] for row in range(len(s))]
+
+    for col in range(len(t)):
+        arr[0][col] = col
+
+    for row in range(len(s)):
+        arr[row][0] = row
+
+    # Compute Levenshtein distance
+    for row in range(1, len(s)):
+        for col in range(1, len(t)):
+            substitute = int(s[row] != t[col])
+
+            arr[row][col] = min(
+                arr[row - 1][col] + 1,
+                arr[row][col - 1] + 1,
+                arr[row - 1][col - 1] + substitute
+            )
+
+    return arr[-1][-1]
+
+
+def select_matching_project(matches: List[str]) -> str:
+    """Allow a user to select a project from the list of matches.
+
+    Args:
+        matches: a list of filtered and sorted projects
+
+    Returns:
+        A project of choice.
+    """
+    options = [f'{idx + 1} - {match}' for (idx, match) in enumerate(matches)]
+    options_str = '\n'.join(options)
+
+    query = f'Select a project (default it 1):\n{options_str}\n'
+    sys.stderr.write(query)
+
+    # Query user
+    choice_str = input()
+    try:
+        choice = int(choice_str) - 1
+    except ValueError:
+        choice = 0
+
+    # Select project
+    if choice < 0:
+        return matches[0]
+    elif choice >= len(matches):
+        return matches[-1]
+
+    return matches[choice]
+
+
+def main():
+    """Main entry into the script."""
+    # Check if a 'Projects' directory exists
+    if not PROJECTS_PATH.is_dir():
+        print("cdp: 'Projects' directory does not exist under '$HOME'")
+        sys.exit(1)
+
+    # Verify number of arguments
+    if (args := len(sys.argv)) == 1:
+        print(PROJECTS_PATH)
+    elif args == 2:
+        try:
+            projects = find_matching_project(sys.argv[1])
+            print(PROJECTS_PATH / projects)
+        except KeyboardInterrupt:
+            sys.exit(1)
+    else:
+        print('cdp: invalid number of arguments, please provide only one')
+        sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()
