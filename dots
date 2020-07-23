@@ -6,7 +6,7 @@
 # Global variables
 ########################################
 # Canonical path to `dots` script directory
-DIR=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
+DOTS=$(cd -P -- "$(dirname -- "$0")" && printf '%s\n' "$(pwd -P)")
 
 PM=""  # Package Manager
 
@@ -120,38 +120,39 @@ install_general() {
     fi
 
     # TODO test this
-    cp $DIR/bin/general/* $HOME/.local/bin
+    cp $DOTS/bin/general/* $HOME/.local/bin
 }
 
 ########################################
 # Install i3wm
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_i3() {
     if [ "$PM" = "apt" ]; then
-        sudo apt install -y arandr i3 i3blocks xautolock xbacklight xorg
+        sudo apt install -y arandr i3 i3blocks network-manager \
+            network-manager-gnome xautolock xbacklight xfce4-notifyd xorg
     else
         return
     fi
 
     # Copy configuration files
-    cp $DIR/config/i3/config $HOME/.config/i3/config
+    cp $DOTS/config/i3/config $HOME/.config/i3/config
     mkdir -p $HOME/.config/i3blocks
-    cp $DIR/config/i3blocks/config $HOME/.config/i3blocks/config
+    cp $DOTS/config/i3blocks/config $HOME/.config/i3blocks/config
 
-    cp $DIR/config/xorg/xinitrc $HOME/.xinitrc
-    cp $DIR/config/xorg/Xresources $HOME/.Xresources
-    sudo cp $DIR/config/xorg/keyboard /etc/default/keyboard
+    cp $DOTS/config/xorg/xinitrc $HOME/.xinitrc
+    cp $DOTS/config/xorg/Xresources $HOME/.Xresources
+    sudo cp $DOTS/config/xorg/keyboard /etc/default/keyboard
 
-    cp $DIR/config/zsh/zprofile $HOME/.zprofile
+    cp $DOTS/config/zsh/zprofile $HOME/.zprofile
 
-    cp $DIR/bin/i3/* $HOME/.local/bin
+    cp $DOTS/bin/i3/* $HOME/.local/bin
 
     # Configure screen locking
     sudo sh -c \
-        "sed 's/{user}/'\"$USER\"'/g' $DIR/config/systemd/lockscreen.service > \
+        "sed 's/{user}/'\"$USER\"'/g' $DOTS/config/systemd/lockscreen.service > \
         /etc/systemd/system/lockscreen.service"
     sudo systemctl enable lockscreen.service
 }
@@ -159,7 +160,7 @@ install_i3() {
 ########################################
 # Install Python
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_python() {
@@ -175,7 +176,7 @@ install_python() {
 ########################################
 # Install NeoVim
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_neovim() {
@@ -186,7 +187,9 @@ install_neovim() {
     fi
 
     mkdir -p $HOME/.config/nvim
-    cp $DIR/config/nvim/init.vim $HOME/.config/nvim/init.vim
+    cp $DOTS/config/editor/vim/init.vim $HOME/.config/nvim/init.vim
+    cp -r $DOTS/config/editor/vim/parts $HOME/.config/nvim/parts
+
     nvim +PlugInstall +qall
 }
 
@@ -206,7 +209,7 @@ install_rust () {
 ########################################
 # Install Tmux
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_tmux() {
@@ -216,13 +219,13 @@ install_tmux() {
         return
     fi
 
-    cp $DIR/config/tmux/tmux.conf $HOME/.tmux.conf
+    cp $DOTS/config/tmux/tmux.conf $HOME/.tmux.conf
 }
 
 ########################################
 # Install Vim
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_vim() {
@@ -232,14 +235,17 @@ install_vim() {
         return
     fi
 
-    cp $DIR/vim/vimrc $HOME/.vim/vimrc 
+    mkdir $HOME/.vim/
+    cp $DOTS/config/editor/vim/vimrc $HOME/.vim/vimrc
+    cp -r $DOTS/config/editor/vim/parts $HOME/.vim/parts
+
     vim +PlugInstall +qall
 }
 
 ########################################
 # Install ZSH
 # Globals
-#   DIR
+#   DOTS
 #   PM
 ########################################
 install_zsh() {
@@ -249,8 +255,8 @@ install_zsh() {
         return
     fi
 
-    cp $DIR/config/zsh/zshenv $HOME/.zshenv
-    cp $DIR/config/zsh/zshrc $HOME/.zshrc
+    cp $DOTS/config/zsh/zshenv $HOME/.zshenv
+    cp $DOTS/config/zsh/zshrc $HOME/.zshrc
 
     rm $HOME/.bash* 2> /dev/null
     rm $HOME/.profile 2> /dev/null

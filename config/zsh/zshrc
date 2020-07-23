@@ -25,8 +25,9 @@ alias sl='ls' # 'ls' typo
 # Utilities
 alias du='du -kh'   # Print readable output.
 alias df='df -kTh'  # Print readable output  
-alias vi='vim'      # Use vim rather than Vi
 
+# Shorthands
+alias e='which_editor'
 
 ########################################
 # Directory
@@ -56,12 +57,6 @@ function cdp() {
     cd $result
 }
 
-# Return branch of the repository if it exists
-function _parse_git_branch() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    echo "("${ref#refs/heads/}")"
-}
-
 # Extract compressed files
 function extract() {
     if [ -f $1 ]; then
@@ -83,6 +78,10 @@ function extract() {
     fi
 }
 
+# FIXME include a password of some sort and optional passphares length
+# FIXME open password in an editor
+# FIXME optional length
+# FIXME create a function for generating a random password
 # Generate ssh-key
 function gen_sshkey() {
     # Generate passphrase
@@ -115,6 +114,22 @@ function mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
 function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
 function mkzip() { zip -r   "${1%%/}.zip"     "${1%%/}/"; }
 
+# Return branch of the repository if it exists
+function parse_git_branch() {
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+    echo "("${ref#refs/heads/}")"
+}
+
+# Select which `vi` derivative to use
+function which_editor() {
+    if [ -x "$(command -v nvim)" ]; then
+        nvim $@
+    elif [ -x "$(command -v vim)" ]; then
+        vim $@
+    else
+        vi $@
+    fi
+}
 
 ########################################
 # History
@@ -153,7 +168,7 @@ fgc="$fg_no_bold[cyan]"
 fgg="$fg_no_bold[green]"
 
 PROMPT="%{$fgbk%}[%{$fgc%}%n%{$fgbk%}@%{$fgc%}%m%{$fgbk%}: \
-%{$fgbl%}%1~%{$fgbk%}]%{$fgbg%}\$(_parse_git_branch)%b%{$reset_color%}$ "
+%{$fgbl%}%1~%{$fgbk%}]%{$fgbg%}\$(parse_git_branch)%b%{$reset_color%}$ "
 
 setopt PROMPT_SUBST
 
