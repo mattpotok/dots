@@ -25,8 +25,28 @@ URxvt.iso14755_52: false
 ! Appearance
 URxvt.scrollBar: false
 
-URxvt.background: black
-URxvt.foreground: green
+! TokyoNight theme
+URxvt.background: #1a1b26
+URxvt.foreground: #c0caf5
+URxvt.cursorColor: #c0caf5
+URxvt.highlightColor: #33467c
+URxvt.highlightTextColor: #c0caf5
+URxvt*color0:  #15161e
+URxvt*color1:  #f7768e
+URxvt*color2:  #9ece6a
+URxvt*color3:  #e0af68
+URxvt*color4:  #7aa2f7
+URxvt*color5:  #bb9af7
+URxvt*color6:  #7dcfff
+URxvt*color7:  #a9b1d6
+URxvt*color8:  #414868
+URxvt*color9:  #f7768e
+URxvt*color10: #9ece6a
+URxvt*color11: #e0af68
+URxvt*color12: #7aa2f7
+URxvt*color13: #bb9af7
+URxvt*color14: #7dcfff
+URxvt*color15: #c0caf5
 
 URxvt.font: xft:DejaVu Sans Mono:pixelsize=14:antialias=true
 URxvt.letterSpace: -1
@@ -42,20 +62,22 @@ URxvt.scrollTtyOutput: false
 URxvt.scrollWithBuffer: true
 URxvt.scrollTtyKeypress: true
 
-! Colors
-URxvt*color0:  #000000 // black
-URxvt*color1:  #B40000 // red
-URxvt*color2:  #00AA00 // green
-URxvt*color3:  #AAAA00 // yellow
-URxvt*color4:  #5555AA // blue
-URxvt*color5:  #AA00AA // magenta
-URxvt*color6:  #00AAAA // cyan
-URxvt*color7:  #AAAAAA // white
-URxvt*color8:  #555555 // grey
-URxvt*color9:  #FF0000 // red
-URxvt*color10: #00FF00 // green
-URxvt*color11: #FFFF00 // yellow
-URxvt*color12: #6464FF // blue
-URxvt*color13: #FF00FF // magenta
-URxvt*color14: #00FFFF // cyan
-URxvt*color15: #FFFFFF // white
+! Previous URxvt theme
+! URxvt.background: black
+! URxvt.foreground: green
+! URxvt*color0:  #000000 // black
+! URxvt*color1:  #B40000 // red
+! URxvt*color2:  #00AA00 // green
+! URxvt*color3:  #AAAA00 // yellow
+! URxvt*color4:  #5555AA // blue
+! URxvt*color5:  #AA00AA // magenta
+! URxvt*color6:  #00AAAA // cyan
+! URxvt*color7:  #AAAAAA // white
+! URxvt*color8:  #555555 // grey
+! URxvt*color9:  #FF0000 // red
+! URxvt*color10: #00FF00 // green
+! URxvt*color11: #FFFF00 // yellow
+! URxvt*color12: #6464FF // blue
+! URxvt*color13: #FF00FF // magenta
+! URxvt*color14: #00FFFF // cyan
+! URxvt*color15: #FFFFFF // white
