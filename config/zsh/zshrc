@@ -45,6 +45,7 @@ setopt PUSHD_TO_HOME      # Allow $HOME to be pushed
 ########################################
 # Functions #
 ########################################
+# --- Navigation and workflow ---
 # `cd` into a project
 function cdp() {
     result=$(cdp_helper $@)
@@ -57,6 +58,31 @@ function cdp() {
     cd $result
 }
 
+# Make and cd into a directory
+function mkcd() {
+    mkdir -p $1
+    cd $1
+}
+
+# Select which `vi` derivative to use
+function which_editor() {
+    if [ -x "$(command -v nvim)" ]; then
+        nvim $@
+    elif [ -x "$(command -v vim)" ]; then
+        vim $@
+    else
+        vi $@
+    fi
+}
+
+# --- Git and prompt ---
+# Return branch of the repository if it exists
+function _parse_git_branch() {
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+    echo " ("${ref#refs/heads/}")"
+}
+
+# --- File and archive utilities ---
 # Extract compressed files
 function extract() {
     if [ -f $1 ]; then
@@ -78,20 +104,14 @@ function extract() {
     fi
 }
 
-# FIXME include a password of some sort and optional passphares length
-# FIXME open password in an editor
-# FIXME optional length
-# FIXME create a function for generating a random password
-# Generate ssh-key
-function gen_sshkey() {
-    # Generate passphrase
-    local passphrase=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
-    echo $passphrase >> passphrase.txt
+# Create archives
+function mkrar() { rar a    "${1%%/}.rar"     "${1%%/}/"; }
+function mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
+function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
+function mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
+function mkzip() { zip -r   "${1%%/}.zip"     "${1%%/}/"; }
 
-    #Generate key
-    ssh-keygen -o -a 100 -t ed25519 -C "potok@mattpotok.com" -f "$HOME/.ssh/id_ed25519" -P $passphrase
-}
-
+# --- Networking and system ---
 # Get IP address
 function getip() {
     in_ip=$(hostname -I | cut -d' ' -f1)
@@ -101,34 +121,15 @@ function getip() {
     echo "external ip: ${ex_ip}"
 }
 
-# Make and cd into a directory
-function mkcd() {
-    mkdir -p $1
-    cd $1
-}
+# --- Security ---
+# Generate ssh-key
+function gen_sshkey() {
+    # Generate passphrase
+    local passphrase=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 16 | xargs)
+    echo $passphrase >> passphrase.txt
 
-# Create archives
-function mkrar() { rar a    "${1%%/}.rar"     "${1%%/}/"; }
-function mktar() { tar cvf  "${1%%/}.tar"     "${1%%/}/"; }
-function mktgz() { tar cvzf "${1%%/}.tar.gz"  "${1%%/}/"; }
-function mktbz() { tar cvjf "${1%%/}.tar.bz2" "${1%%/}/"; }
-function mkzip() { zip -r   "${1%%/}.zip"     "${1%%/}/"; }
-
-# Return branch of the repository if it exists
-function parse_git_branch() {
-    ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    echo "("${ref#refs/heads/}")"
-}
-
-# Select which `vi` derivative to use
-function which_editor() {
-    if [ -x "$(command -v nvim)" ]; then
-        nvim $@
-    elif [ -x "$(command -v vim)" ]; then
-        vim $@
-    else
-        vi $@
-    fi
+    #Generate key
+    ssh-keygen -o -a 100 -t ed25519 -C "potok@mattpotok.com" -f "$HOME/.ssh/id_ed25519" -P $passphrase
 }
 
 ########################################
@@ -161,14 +162,12 @@ compinit
 ########################################
 # Prompt
 ########################################
-fgbk="$fg_bold[black]"
-fgbl="$fg_bold[blue]"
-fgbg="$fg_bold[green]"
-fgc="$fg_no_bold[cyan]"
-fgg="$fg_no_bold[green]"
+fg_prompt_context="$fg_no_bold[blue]"
+fg_prompt_directory="$fg_no_bold[cyan]"
+fg_prompt_branch="$fg_bold[green]"
 
-PROMPT="%{$fgbk%}[%{$fgc%}%n%{$fgbk%}@%{$fgc%}%m%{$fgbk%}: \
-%{$fgbl%}%1~%{$fgbk%}]%{$fgbg%}\$(parse_git_branch)%b%{$reset_color%}$ "
+# Simple single-line prompt: blue user/host, cyan current directory.
+PROMPT="%{$fg_prompt_context%}%n@%m:%{$fg_prompt_directory%}%1~%{$fg_prompt_branch%}\$(_parse_git_branch)%{$reset_color%} %# "
 
 setopt PROMPT_SUBST
 
