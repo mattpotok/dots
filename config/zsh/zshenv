@@ -3,7 +3,7 @@
 # Exports
 export EDITOR="nvim"
 export BROWSER="firefox"
-export TERMINAL="urxvt"
+export TERMINAL="ghostty"
 
 # Default path
 PATH="/bin:/usr/bin:/usr/local/bin:$HOME/.local/bin"

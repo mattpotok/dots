@@ -23,7 +23,10 @@ set $right l
 floating_modifier $mod
 
 # Start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec ghostty
+
+# Take an interactive screenshot
+bindsym Print exec flameshot gui
 
 # Kill focused window
 bindsym $mod+Shift+q kill
@@ -85,11 +88,11 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # Move the currently focused window to the scratchpad
-bindsym $mod+Shift+p move scratchpad
+# bindsym $mod+Shift+p move scratchpad
 
 # Show the next scratchpad window or hide the focused scratchpad window.
 # If there are multiple scratchpad windows, this command cycles through them.
-bindsym $mod+p scratchpad show
+# bindsym $mod+p scratchpad show
 
 # Define names for default workspaces for
 set $ws1 "1"
@@ -164,6 +167,12 @@ bindsym $mod+r mode "resize"
 
 # Lock screen
 bindsym $mod+Control+l exec lockscreen
+
+# Composite GTK popups, shadows, and transparency.
+exec --no-startup-id picom --backend xrender
+
+# Make the X display available to D-Bus/systemd user services such as portals.
+exec --no-startup-id dbus-update-activation-environment --systemd DISPLAY XAUTHORITY
 exec --no-startup-id xautolock -time 15 -locker 'lockscreen' &
 
 # Power management
