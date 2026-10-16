@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Switch to the next XKB keyboard layout group."""
+
+from __future__ import annotations
+
+import ctypes
+import subprocess
+import sys
+
+
+XKB_USE_CORE_KBD = 0x0100
+
+
+class XkbState(ctypes.Structure):
+    """The portion of XkbStateRec needed to read the effective group."""
+
+    _fields_ = [
+        ("group", ctypes.c_ubyte),
+        ("locked_group", ctypes.c_ubyte),
+        ("base_group", ctypes.c_ushort),
+        ("latched_group", ctypes.c_ushort),
+        ("mods", ctypes.c_ubyte),
+        ("base_mods", ctypes.c_ubyte),
+        ("latched_mods", ctypes.c_ubyte),
+        ("locked_mods", ctypes.c_ubyte),
+        ("compat_state", ctypes.c_ubyte),
+        ("grab_mods", ctypes.c_ubyte),
+        ("compat_grab_mods", ctypes.c_ubyte),
+        ("lookup_mods", ctypes.c_ubyte),
+        ("compat_lookup_mods", ctypes.c_ubyte),
+        ("ptr_buttons", ctypes.c_ushort),
+    ]
+
+
+def layout_group_count() -> int:
+    """Return the number of layouts configured for the current X display."""
+    result = subprocess.run(
+        ["setxkbmap", "-query"],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    for line in result.stdout.splitlines():
+        name, separator, value = line.partition(":")
+        if name.strip() == "layout" and separator:
+            layouts = [layout for layout in value.split(",") if layout.strip()]
+            if layouts:
+                return len(layouts)
+    raise RuntimeError("could not determine configured XKB layout groups")
+
+
+def main() -> int:
+    x11 = ctypes.CDLL("libX11.so.6")
+    x11.XOpenDisplay.argtypes = [ctypes.c_char_p]
+    x11.XOpenDisplay.restype = ctypes.c_void_p
+    x11.XkbGetState.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.POINTER(XkbState)]
+    x11.XkbGetState.restype = ctypes.c_int
+    x11.XkbLockGroup.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.c_uint]
+    x11.XkbLockGroup.restype = ctypes.c_int
+    x11.XFlush.argtypes = [ctypes.c_void_p]
+    x11.XCloseDisplay.argtypes = [ctypes.c_void_p]
+
+    display = x11.XOpenDisplay(None)
+    if not display:
+        raise RuntimeError("could not connect to the X display")
+
+    try:
+        state = XkbState()
+        if x11.XkbGetState(display, XKB_USE_CORE_KBD, ctypes.byref(state)) != 0:
+            raise RuntimeError("could not read the active XKB layout group")
+
+        next_group = (state.group + 1) % layout_group_count()
+        if not x11.XkbLockGroup(display, XKB_USE_CORE_KBD, next_group):
+            raise RuntimeError("could not switch the active XKB layout group")
+        x11.XFlush(display)
+    finally:
+        x11.XCloseDisplay(display)
+
+    return 0
+
+
+if __name__ == "__main__":
+    try:
+        raise SystemExit(main())
+    except (OSError, RuntimeError, subprocess.CalledProcessError) as error:
+        print(f"toggle-keyboard-layout: {error}", file=sys.stderr)
+        raise SystemExit(1) from error

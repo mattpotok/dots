@@ -1,0 +1,23 @@
+#!/bin/sh
+# Print battery health as full capacity relative to design capacity.
+
+set -eu
+
+for battery_directory in /sys/class/power_supply/BAT*; do
+    [ -d "$battery_directory" ] && break
+done
+
+if [ ! -d "${battery_directory:-}" ]; then
+    exit 0
+fi
+
+if [ -r "$battery_directory/charge_full" ]; then
+    full=$(cat "$battery_directory/charge_full")
+    design=$(cat "$battery_directory/charge_full_design")
+else
+    full=$(cat "$battery_directory/energy_full")
+    design=$(cat "$battery_directory/energy_full_design")
+fi
+
+capacity=$(((100 * full + design / 2) / design))
+printf '%s%%\n' "$capacity"

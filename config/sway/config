@@ -1,0 +1,174 @@
+# Sway configuration. This is kept separate from i3 while Wayland is evaluated.
+
+set $mod Mod4
+set $workspace_mod Mod1
+set $left h
+set $down j
+set $up k
+set $right l
+set $term ghostty
+set $menu wmenu-run
+
+font pango:DejaVu Sans Mono, Font Awesome 6 Free Solid, Font Awesome 6 Free Regular 9
+
+# Input
+input type:touchpad {
+    dwt enabled
+    tap enabled
+}
+
+input type:keyboard {
+    xkb_layout "us,us"
+    xkb_variant "dvp,"
+    xkb_options "caps:escape,terminate:ctrl_alt_bksp,grp:win_space_toggle"
+}
+
+# Super+Space switches QWERTY/DVP at the XKB level, including while locked.
+bindsym $mod+Control+f focus mode_toggle
+
+# Core window management
+bindsym $mod+Return exec $term
+bindsym $mod+d exec $menu
+bindsym $mod+Shift+q kill
+floating_modifier $mod normal
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+bindsym $mod+minus splitv
+bindsym $mod+bar splith
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+a focus parent
+
+# Workspaces
+set $ws1 "1"
+set $ws2 "2"
+set $ws3 "3"
+set $ws4 "4"
+set $ws5 "5"
+set $ws6 "6"
+set $ws7 "7"
+set $ws8 "8"
+set $ws9 "9"
+set $ws10 "10"
+
+# Group 1: Programmer Dvorak. Its unshifted symbols select workspaces;
+# Shift is consumed to produce its digits when moving containers.
+bindsym Group1+$workspace_mod+parenleft workspace $ws1
+bindsym Group1+$workspace_mod+parenright workspace $ws2
+bindsym Group1+$workspace_mod+braceright workspace $ws3
+bindsym Group1+$workspace_mod+plus workspace $ws4
+bindsym Group1+$workspace_mod+braceleft workspace $ws5
+bindsym Group1+$workspace_mod+bracketright workspace $ws6
+bindsym Group1+$workspace_mod+bracketleft workspace $ws7
+bindsym Group1+$workspace_mod+exclam workspace $ws8
+bindsym Group1+$workspace_mod+equal workspace $ws9
+bindsym Group1+$workspace_mod+asterisk workspace $ws10
+
+bindsym Group1+$workspace_mod+1 move container to workspace $ws1
+bindsym Group1+$workspace_mod+2 move container to workspace $ws2
+bindsym Group1+$workspace_mod+3 move container to workspace $ws3
+bindsym Group1+$workspace_mod+4 move container to workspace $ws4
+bindsym Group1+$workspace_mod+5 move container to workspace $ws5
+bindsym Group1+$workspace_mod+6 move container to workspace $ws6
+bindsym Group1+$workspace_mod+7 move container to workspace $ws7
+bindsym Group1+$workspace_mod+8 move container to workspace $ws8
+bindsym Group1+$workspace_mod+9 move container to workspace $ws9
+bindsym Group1+$workspace_mod+0 move container to workspace $ws10
+
+# Group 2: QWERTY.
+bindsym Group2+$workspace_mod+1 workspace $ws1
+bindsym Group2+$workspace_mod+2 workspace $ws2
+bindsym Group2+$workspace_mod+3 workspace $ws3
+bindsym Group2+$workspace_mod+4 workspace $ws4
+bindsym Group2+$workspace_mod+5 workspace $ws5
+bindsym Group2+$workspace_mod+6 workspace $ws6
+bindsym Group2+$workspace_mod+7 workspace $ws7
+bindsym Group2+$workspace_mod+8 workspace $ws8
+bindsym Group2+$workspace_mod+9 workspace $ws9
+bindsym Group2+$workspace_mod+0 workspace $ws10
+
+bindsym Group2+$workspace_mod+Shift+1 move container to workspace $ws1
+bindsym Group2+$workspace_mod+Shift+2 move container to workspace $ws2
+bindsym Group2+$workspace_mod+Shift+3 move container to workspace $ws3
+bindsym Group2+$workspace_mod+Shift+4 move container to workspace $ws4
+bindsym Group2+$workspace_mod+Shift+5 move container to workspace $ws5
+bindsym Group2+$workspace_mod+Shift+6 move container to workspace $ws6
+bindsym Group2+$workspace_mod+Shift+7 move container to workspace $ws7
+bindsym Group2+$workspace_mod+Shift+8 move container to workspace $ws8
+bindsym Group2+$workspace_mod+Shift+9 move container to workspace $ws9
+bindsym Group2+$workspace_mod+Shift+0 move container to workspace $ws10
+
+# Reload and exit
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit Sway?' -B 'Yes, exit Sway' 'swaymsg exit'
+
+# Resize mode
+mode "resize" {
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Lock and idle management
+bindsym $mod+Control+l exec ~/.local/bin/sway-lock
+# Use the same lock behavior after 10 minutes idle: lock now, then power off
+# outputs after one minute. The helper restores outputs on lock-screen input.
+exec swayidle -w timeout 600 '~/.local/bin/sway-lock' before-sleep 'swaylock -f -c 000000'
+
+# Power management
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) poweroff
+mode "$mode_system" {
+    bindsym l exec ~/.local/bin/sway-lock, mode "default"
+    bindsym e exec swaymsg exit, mode "default"
+    bindsym s exec systemctl suspend, mode "default"
+    bindsym h exec systemctl hibernate, mode "default"
+    bindsym r exec systemctl reboot, mode "default"
+    bindsym p exec systemctl poweroff, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Delete mode "$mode_system"
+
+# Hardware controls
+bindsym --locked XF86AudioMute exec pactl set-sink-mute \@DEFAULT_SINK@ toggle
+bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume \@DEFAULT_SINK@ -5%
+bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume \@DEFAULT_SINK@ +5%
+bindsym --locked XF86AudioMicMute exec pactl set-source-mute \@DEFAULT_SOURCE@ toggle
+bindsym --locked XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
+
+# Sway-native status bar. X11-only services are migrated separately.
+bar {
+    position bottom
+    font pango:DejaVu Sans Mono, Font Awesome 6 Free Solid, Font Awesome 6 Free Regular 9
+    status_command ~/.config/i3status-rust/bin/status
+}

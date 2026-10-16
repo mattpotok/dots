@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Avoid starting a second locker when the global idle timer fires after a
+# manually initiated lock.
+if pgrep -x swaylock >/dev/null; then
+    exit 0
+fi
+
+# This watcher exists only for the lifetime of the lock screen. It turns the
+# display off after one minute and restores it on the first subsequent input.
+swayidle -w \
+    timeout 60 'swaymsg "output * power off"' \
+    resume 'swaymsg "output * power on"' &
+idle_pid=$!
+
+cleanup() {
+    kill "$idle_pid" 2>/dev/null || true
+    wait "$idle_pid" 2>/dev/null || true
+    swaymsg 'output * power on' >/dev/null 2>&1 || true
+}
+trap cleanup 0 1 2 15
+
+# Do not daemonize: the helper must remain alive until the screen is unlocked.
+swaylock -c 000000

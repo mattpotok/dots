@@ -1,0 +1,99 @@
+# i3status-rust configuration for i3bar using Font Awesome 6 icons.
+
+icons_format = "<span font_family='Font Awesome 6 Free Solid'>{icon}</span>"
+
+[theme]
+theme = "plain"
+
+[theme.overrides]
+end_separator = "|"
+
+[icons]
+icons = "awesome6"
+
+[[block]]
+block = "sound"
+driver = "auto"
+format = " $icon {$volume.eng(w:2)|muted} "
+headphones_indicator = true
+
+[[block.click]]
+button = "left"
+cmd = "pavucontrol"
+
+[[block]]
+block = "cpu"
+interval = 5
+
+[[block]]
+block = "custom"
+command = "~/.config/i3status-rust/bin/memory-status"
+interval = 5
+format = " <span font_family='Font Awesome 6 Free Solid'>\uf2db</span> $text "
+
+[[block]]
+block = "disk_space"
+path = "/"
+info_type = "available"
+interval = 60
+format = " $icon $available.eng(w:3, p:Gi) ($percentage.eng(w:1)) "
+
+[[block]]
+block = "weather"
+if_command = "test -n \"$OPENWEATHERMAP_API_KEY\""
+format = " $icon $weather $temp "
+error_format = " <span font_family='Font Awesome 6 Free Solid'>\uf071</span> unavailable "
+interval = 1800
+autolocate = true
+autolocate_interval = 21600
+[block.service]
+name = "openweathermap"
+units = "metric"
+
+[[block.click]]
+button = "left"
+update = true
+
+[[block]]
+block = "hueshift"
+if_command = "command -v gammastep"
+hue_shifter = "gammastep"
+format = " $icon $temperature K "
+step = 100
+click_temp = 4000
+
+[[block]]
+block = "battery"
+format = " $icon $percentage DIS {$time_remaining.dur(hms:true, min_unit:m) |}"
+charging_format = " $icon $percentage CHR {$time_remaining.dur(hms:true, min_unit:m) |}"
+full_format = " $icon $percentage FUL "
+full_threshold = 100
+not_charging_format = " $icon $percentage UNK "
+empty_format = " $icon $percentage UNK "
+missing_format = ""
+
+[[block]]
+block = "custom"
+command = "~/.config/i3status-rust/bin/battery-capacity"
+interval = 3600
+format = " <span font_family='Font Awesome 6 Free Solid'>\uf240</span> $text "
+
+[[block]]
+block = "keyboard_layout"
+format = " <span font_family='Font Awesome 6 Free Solid'>\uf11c</span> $layout "
+[block.mappings]
+"us (N/A)" = "QWR"
+"us (dvp)" = "DVP"
+
+[[block.click]]
+button = "left"
+cmd = "~/.config/i3status-rust/bin/toggle-keyboard-layout"
+
+[[block]]
+block = "time"
+interval = 60
+format = " $icon $timestamp.datetime(f:'%Y-%m-%d %H:%M') "
+
+[[block.click]]
+button = "left"
+cmd = "gsimplecal"

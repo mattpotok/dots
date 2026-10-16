@@ -1,0 +1,29 @@
+#!/bin/sh
+# Load user-local i3status-rust secrets without storing them in this repository.
+
+set -eu
+
+config_directory="$HOME/.config/i3status-rust"
+environment_file="$config_directory/environment"
+if [ -r "$environment_file" ]; then
+    . "$environment_file"
+fi
+export OPENWEATHERMAP_API_KEY="${OPENWEATHERMAP_API_KEY:-}"
+
+if [ -n "${SWAYSOCK:-}" ]; then
+    config_file="$config_directory/config-sway-icons.toml"
+else
+    mode_file="$config_directory/status-mode"
+    mode="text"
+    if [ -r "$mode_file" ]; then
+        mode=$(cat "$mode_file")
+    fi
+
+    case "$mode" in
+        icons) config_file="$config_directory/config-icons.toml" ;;
+        text) config_file="$config_directory/config.toml" ;;
+        *) printf 'status: invalid display mode: %s\n' "$mode" >&2; exit 1 ;;
+    esac
+fi
+
+exec i3status-rs "$config_file"

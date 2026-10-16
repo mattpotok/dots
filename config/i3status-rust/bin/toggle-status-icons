@@ -1,0 +1,20 @@
+#!/bin/sh
+# Toggle i3status-rust between text and Font Awesome 6 icon profiles.
+
+set -eu
+
+config_directory="$HOME/.config/i3status-rust"
+mode_file="$config_directory/status-mode"
+mode="text"
+if [ -r "$mode_file" ]; then
+    mode=$(cat "$mode_file")
+fi
+
+case "$mode" in
+    text) next_mode="icons" ;;
+    icons) next_mode="text" ;;
+    *) printf 'toggle-status-icons: invalid display mode: %s\n' "$mode" >&2; exit 1 ;;
+esac
+
+printf '%s\n' "$next_mode" > "$mode_file"
+i3-msg restart >/dev/null

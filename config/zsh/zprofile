@@ -4,3 +4,8 @@
 if [[ ! $DISPLAY && $(tty) == /dev/tty1 ]]; then
     exec startx &> ~/.Xlog
 fi
+
+# Run Sway's packaged configuration on TTY2 while Wayland support is evaluated.
+if [[ ! $DISPLAY && $(tty) == /dev/tty2 ]]; then
+    exec dbus-run-session sway -c "$HOME/.config/sway/config"
+fi

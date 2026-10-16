@@ -116,7 +116,7 @@ install_code() {
 ########################################
 install_general() {
     if [ "$PM" = "apt" ]; then
-        sudo apt install -y keychain feh trash-cli vlc
+        sudo apt install -y keychain feh trash-cli udisks2 vlc
     fi
 
     # TODO test this
@@ -131,16 +131,24 @@ install_general() {
 ########################################
 install_i3() {
     if [ "$PM" = "apt" ]; then
-        sudo apt install -y arandr i3 i3blocks network-manager \
-            network-manager-gnome xautolock xbacklight xfce4-notifyd xorg
+        sudo apt install -y arandr i3 network-manager network-manager-gnome \
+            gammastep pavucontrol xautolock xbacklight xfce4-notifyd xorg
     else
         return
     fi
 
-    # Copy configuration files
-    cp $DOTS/config/i3/config $HOME/.config/i3/config
-    mkdir -p $HOME/.config/i3blocks
-    cp $DOTS/config/i3blocks/config $HOME/.config/i3blocks/config
+    # Link the i3 configuration so repository changes apply immediately.
+    mkdir -p "$HOME/.config/i3"
+    ln -sfn "$DOTS/config/i3/config" "$HOME/.config/i3/config"
+    mkdir -p $HOME/.config/i3status-rust
+    cp $DOTS/config/i3status-rust/config.toml $HOME/.config/i3status-rust/config.toml
+    cp $DOTS/config/i3status-rust/config-icons.toml $HOME/.config/i3status-rust/config-icons.toml
+    cp $DOTS/config/i3status-rust/config-sway-icons.toml $HOME/.config/i3status-rust/config-sway-icons.toml
+    cp $DOTS/config/i3status-rust/status-mode $HOME/.config/i3status-rust/status-mode
+    mkdir -p $HOME/.config/i3status-rust/bin
+    cp $DOTS/config/i3status-rust/bin/* $HOME/.config/i3status-rust/bin/
+    mkdir -p $HOME/.config/gammastep
+    cp $DOTS/config/gammastep/config.ini $HOME/.config/gammastep/config.ini
 
     cp $DOTS/config/xorg/xinitrc $HOME/.xinitrc
     cp $DOTS/config/xorg/Xresources $HOME/.Xresources

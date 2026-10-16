@@ -1,0 +1,16 @@
+#!/bin/sh
+# Print used and total memory with fixed one-decimal GiB precision.
+
+awk '
+    $1 == "MemTotal:" { total = $2 }
+    $1 == "MemAvailable:" { available = $2 }
+    END {
+        if (!total || !available) {
+            exit 1
+        }
+
+        used = total - available
+        printf "%.1fGiB / %.1fGiB (%.0f%%)\n", \
+            used / 1048576, total / 1048576, used * 100 / total
+    }
+' /proc/meminfo
