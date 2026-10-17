@@ -1,0 +1,11 @@
+#!/bin/sh
+# Reuse the existing user-local API key without copying it into the repository.
+set -eu
+
+environment_file="$HOME/.config/i3status-rust/environment"
+if [ -r "$environment_file" ]; then
+    . "$environment_file"
+fi
+export OPENWEATHERMAP_API_KEY="${OPENWEATHERMAP_API_KEY:-}"
+
+exec python3 "$(dirname "$0")/weather.py" "$@"

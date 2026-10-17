@@ -1,0 +1,102 @@
+* {
+    font-family: "DejaVu Sans Mono";
+    font-size: 9pt;
+}
+
+/* Keep the bar compact without shrinking tray menu checkboxes. */
+window#waybar, #workspaces button, #mode, #clock, #tray,
+#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #battery, #custom-keyboard {
+    min-height: 0;
+}
+
+window#waybar {
+    background: #000000;
+    color: #ffffff;
+}
+
+#workspaces button {
+    padding: 0 5px;
+    border-radius: 0;
+    color: #888888;
+}
+
+#workspaces button.focused {
+    background: #285577;
+    color: #ffffff;
+}
+
+#mode, #tray {
+    padding: 2px 6px;
+}
+
+#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #battery, #custom-keyboard, #clock {
+    margin: 5px 0;
+    padding: 0 8px;
+    color: #93a1a1;
+    border-right: 1px solid #666666;
+}
+
+#pulseaudio {
+    border-left: 1px solid #666666;
+}
+
+#pulseaudio.muted, #custom-disk.warning {
+    color: #b58900;
+}
+
+#custom-disk.critical {
+    color: #dc322f;
+}
+
+#custom-weather.error {
+    color: #dc322f;
+}
+
+/* Match the legacy battery script's ten discharge color bands. */
+#battery {
+    color: #93a1a1;
+}
+
+#battery.charging {
+    color: #93a1a1;
+}
+
+#battery.discharging.level-90 {
+    color: #00ff00;
+}
+
+#battery.discharging.level-80 {
+    color: #37ff00;
+}
+
+#battery.discharging.level-70 {
+    color: #75ff00;
+}
+
+#battery.discharging.level-60 {
+    color: #aaff00;
+}
+
+#battery.discharging.level-50 {
+    color: #e1ff00;
+}
+
+#battery.discharging.level-40 {
+    color: #ffe100;
+}
+
+#battery.discharging.level-30 {
+    color: #ffaa00;
+}
+
+#battery.discharging.level-20 {
+    color: #ff7300;
+}
+
+#battery.discharging.level-10 {
+    color: #ff3700;
+}
+
+#battery.discharging.level-0 {
+    color: #ff0000;
+}

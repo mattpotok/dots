@@ -1,0 +1,12 @@
+#!/bin/sh
+# Place the calendar inside the focused workspace, clear of the status bar.
+set -eu
+
+calendar=$(swaymsg -t get_tree | jq -c \
+    'first(.. | objects | select(.app_id? == "gsimplecal") | .rect)')
+[ "$calendar" != null ] || exit 0
+position=$(swaymsg -t get_workspaces | jq -r --argjson calendar "$calendar" '
+    .[] | select(.focused) | .rect |
+    "\(.x + ([0, .width - $calendar.width - 8] | max)) \(.y + ([0, .height - $calendar.height - 8] | max))"
+')
+exec swaymsg "[app_id=\"gsimplecal\"] move absolute position $position"

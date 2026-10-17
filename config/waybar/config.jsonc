@@ -1,0 +1,82 @@
+{
+    "layer": "bottom",
+    "position": "bottom",
+    "modules-left": ["sway/workspaces", "sway/mode"],
+    "modules-right": ["pulseaudio", "cpu", "memory", "custom/disk", "custom/weather", "battery", "custom/keyboard", "clock", "tray"],
+    "pulseaudio": {
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>{icon}</span> {volume}%",
+        "format-muted": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf6a9</span> muted",
+        "format-icons": {
+            "headphone": "\uf025",
+            "headset": "\uf025",
+            "default": ["\uf026", "\uf027", "\uf028"]
+        },
+        "scroll-step": 1,
+        "smooth-scrolling-threshold": 1,
+        "on-click": "pavucontrol",
+        "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+    },
+    "cpu": {
+        "interval": 5,
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>{icon}</span> {usage:2}%",
+        "format-icons": ["\uf624", "\uf624", "\uf625"]
+    },
+    "memory": {
+        "interval": 5,
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf2db</span> {percentage}%",
+        "tooltip-format": "{used:.1f}GiB / {total:.1f}GiB used"
+    },
+    "custom/disk": {
+        "exec": "~/.config/waybar/bin/disk-space.py",
+        "return-type": "json",
+        "interval": 60,
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf0a0</span> {}"
+    },
+    "custom/weather": {
+        "exec": "~/.config/waybar/bin/weather",
+        "return-type": "json",
+        "interval": 1800,
+        "signal": 8,
+        "format": "{}",
+        "on-click": "~/.config/waybar/bin/weather --clear-location-cache && pkill -RTMIN+8 -x waybar",
+        "exec-on-event": false
+    },
+    "battery": {
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>{icon}</span> {capacity}%",
+        "format-charging": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf1e6</span> {capacity}%",
+        "format-plugged": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf1e6</span> {capacity}%",
+        "format-full": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf1e6</span> {capacity}%",
+        "format-icons": ["\uf244", "\uf243", "\uf242", "\uf241", "\uf240"],
+        "states": {
+            "level-0": 9,
+            "level-10": 19,
+            "level-20": 29,
+            "level-30": 39,
+            "level-40": 49,
+            "level-50": 59,
+            "level-60": 69,
+            "level-70": 79,
+            "level-80": 89,
+            "level-90": 100
+        },
+        "tooltip-format": "{timeTo}\nHealth: {health}% of design capacity\nPower: {power:.1f} W"
+    },
+    "custom/keyboard": {
+        "exec": "~/.config/waybar/bin/keyboard-layout",
+        "return-type": "json",
+        "restart-interval": 1,
+        "exec-on-event": false,
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf11c</span> {}",
+        "on-click": "swaymsg 'input type:keyboard xkb_switch_layout next'"
+    },
+    "clock": {
+        "interval": 60,
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf017</span> {:%Y-%m-%d %H:%M}",
+        "on-click": "gsimplecal",
+        "tooltip": false
+    },
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    }
+}

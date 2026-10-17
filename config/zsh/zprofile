@@ -1,11 +1,11 @@
 # Zsh profile file. Runs on login.
 
-# Start X graphical server
+# Start Sway on the primary graphical TTY.
 if [[ ! $DISPLAY && $(tty) == /dev/tty1 ]]; then
-    exec startx &> ~/.Xlog
+    exec dbus-run-session sway -c "$HOME/.config/sway/config"
 fi
 
-# Run Sway's packaged configuration on TTY2 while Wayland support is evaluated.
+# Keep the X/i3 session available as a fallback on TTY2.
 if [[ ! $DISPLAY && $(tty) == /dev/tty2 ]]; then
-    exec dbus-run-session sway -c "$HOME/.config/sway/config"
+    exec startx &> ~/.Xlog
 fi

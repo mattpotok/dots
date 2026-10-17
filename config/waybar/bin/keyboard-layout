@@ -1,0 +1,15 @@
+#!/bin/sh
+# Emit Waybar JSON initially and whenever Sway reports a keyboard layout change.
+set -eu
+
+keyboard='1:1:AT_Translated_Set_2_keyboard'
+{
+    swaymsg -t get_inputs | jq -c --arg keyboard "$keyboard" \
+        '.[] | select(.identifier == $keyboard)'
+    swaymsg -m -t subscribe '["input"]' | jq --unbuffered -c --arg keyboard "$keyboard" \
+        'select(.change == "xkb_layout") | .input | select(.identifier == $keyboard)'
+} | jq --unbuffered -c '
+    .xkb_active_layout_name as $layout |
+    {text: ({"English (US)": "QWR", "English (programmer Dvorak)": "DVP"}[$layout] // $layout),
+     tooltip: $layout}
+'

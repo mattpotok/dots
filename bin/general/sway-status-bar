@@ -1,0 +1,32 @@
+#!/bin/sh
+# Select the bar Sway launches; --toggle changes the selection and reloads Sway.
+set -eu
+
+state_directory="${XDG_STATE_HOME:-$HOME/.local/state}/dots"
+mode_file="$state_directory/bar-mode"
+mode=swaybar
+if [ -r "$mode_file" ]; then
+    mode=$(cat "$mode_file")
+fi
+
+if [ "${1:-}" = --toggle ]; then
+    case "$mode" in
+        waybar) mode=swaybar ;;
+        *)
+            command -v waybar >/dev/null || {
+                printf 'sway-status-bar: install waybar first\n' >&2
+                exit 1
+            }
+            mode=waybar
+            ;;
+    esac
+    mkdir -p "$state_directory"
+    printf '%s\n' "$mode" > "$mode_file"
+    exec swaymsg reload
+fi
+
+if [ "$mode" = waybar ] && command -v waybar >/dev/null; then
+    exec waybar "$@" --config "$HOME/.config/waybar/config.jsonc" \
+        --style "$HOME/.config/waybar/style.css"
+fi
+exec swaybar "$@"

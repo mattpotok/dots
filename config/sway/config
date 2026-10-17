@@ -27,8 +27,12 @@ input type:keyboard {
 bindsym $mod+Control+f focus mode_toggle
 
 # Core window management
+for_window [app_id="gsimplecal"] floating enable, border pixel 1, exec ~/.config/sway/bin/position-calendar
+
 bindsym $mod+Return exec $term
 bindsym $mod+d exec $menu
+bindsym --release Print exec geometry=$(slurp) && grim -g "$geometry" - | swappy -f -
+bindsym --release Shift+Print exec grim - | swappy -f -
 bindsym $mod+Shift+q kill
 floating_modifier $mod normal
 
@@ -120,6 +124,7 @@ bindsym Group2+$workspace_mod+Shift+0 move container to workspace $ws10
 
 # Reload and exit
 bindsym $mod+Shift+c reload
+bindsym $mod+Shift+b exec ~/.local/bin/sway-status-bar --toggle
 bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit Sway?' -B 'Yes, exit Sway' 'swaymsg exit'
 
 # Resize mode
@@ -136,6 +141,9 @@ mode "resize" {
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
+
+# Startup applications
+exec nm-applet --indicator
 
 # Lock and idle management
 bindsym $mod+Control+l exec ~/.local/bin/sway-lock
@@ -168,6 +176,7 @@ bindsym --locked XF86MonBrightnessUp exec brightnessctl set 5%+
 
 # Sway-native status bar. X11-only services are migrated separately.
 bar {
+    swaybar_command /home/mattpotok/.local/bin/sway-status-bar
     position bottom
     font pango:DejaVu Sans Mono, Font Awesome 6 Free Solid, Font Awesome 6 Free Regular 9
     status_command ~/.config/i3status-rust/bin/status
