@@ -1,5 +1,8 @@
 # Sway configuration. This is kept separate from i3 while Wayland is evaluated.
 
+# Import the graphical-session environment for systemd and D-Bus services.
+include /etc/sway/config.d/*
+
 set $mod Mod4
 set $workspace_mod Mod1
 set $left h

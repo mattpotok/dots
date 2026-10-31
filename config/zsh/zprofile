@@ -2,7 +2,9 @@
 
 # Start Sway on the primary graphical TTY.
 if [[ ! $DISPLAY && $(tty) == /dev/tty1 ]]; then
-    exec dbus-run-session sway -c "$HOME/.config/sway/config"
+    # Share the systemd user bus with services such as GNOME Keyring.
+    export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
+    exec sway -c "$HOME/.config/sway/config"
 fi
 
 # Keep the X/i3 session available as a fallback on TTY2.

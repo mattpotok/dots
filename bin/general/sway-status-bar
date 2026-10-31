@@ -26,6 +26,11 @@ if [ "${1:-}" = --toggle ]; then
 fi
 
 if [ "$mode" = waybar ] && command -v waybar >/dev/null; then
+    # Temporary popup-scrolling fix; see config/waybar/README.md.
+    layer_shell_directory="$HOME/.local/opt/gtk-layer-shell-eb7876471dea/lib"
+    if [ -r "$layer_shell_directory/libgtk-layer-shell.so.0" ]; then
+        export LD_LIBRARY_PATH="$layer_shell_directory${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    fi
     exec waybar "$@" --config "$HOME/.config/waybar/config.jsonc" \
         --style "$HOME/.config/waybar/style.css"
 fi
