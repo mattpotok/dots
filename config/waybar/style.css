@@ -5,7 +5,7 @@
 
 /* Keep the bar compact without shrinking tray menu checkboxes. */
 window#waybar, #workspaces button, #mode, #clock, #tray,
-#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #battery, #custom-keyboard {
+#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #custom-night-light, #backlight, #battery, #custom-keyboard {
     min-height: 0;
 }
 
@@ -29,7 +29,7 @@ window#waybar {
     padding: 2px 6px;
 }
 
-#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #battery, #custom-keyboard, #clock {
+#pulseaudio, #cpu, #memory, #custom-disk, #custom-weather, #custom-night-light, #backlight, #battery, #custom-keyboard, #clock {
     margin: 5px 0;
     padding: 0 8px;
     color: #93a1a1;
@@ -48,7 +48,7 @@ window#waybar {
     color: #dc322f;
 }
 
-#custom-weather.error {
+#custom-weather.error, #custom-night-light.error {
     color: #dc322f;
 }
 

@@ -147,6 +147,8 @@ bindsym $mod+r mode "resize"
 
 # Startup applications
 exec nm-applet --indicator
+# Keep night-light scheduling independent of Waybar restarts.
+exec /usr/bin/python3 ~/.config/waybar/bin/night-light.py daemon
 
 # Lock and idle management
 bindsym $mod+Control+l exec ~/.local/bin/sway-lock

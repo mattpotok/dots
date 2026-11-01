@@ -2,7 +2,7 @@
     "layer": "bottom",
     "position": "bottom",
     "modules-left": ["sway/workspaces", "sway/mode"],
-    "modules-right": ["pulseaudio", "cpu", "memory", "custom/disk", "custom/weather", "battery", "custom/keyboard", "clock", "tray"],
+    "modules-right": ["pulseaudio", "cpu", "memory", "custom/disk", "custom/weather", "custom/night-light", "backlight", "battery", "custom/keyboard", "clock", "tray"],
     "pulseaudio": {
         "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>{icon}</span> {volume}%",
         "format-muted": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf6a9</span> muted",
@@ -40,6 +40,22 @@
         "format": "{}",
         "on-click": "~/.config/waybar/bin/weather --clear-location-cache && pkill -RTMIN+8 -x waybar",
         "exec-on-event": false
+    },
+    "custom/night-light": {
+        "exec": "/usr/bin/python3 ~/.config/waybar/bin/night-light.py status",
+        "interval": 5,
+        "return-type": "json",
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf0eb</span> {}",
+        "on-click": "/usr/bin/python3 ~/.config/waybar/bin/night-light.py toggle",
+        "on-click-right": "/usr/bin/python3 ~/.config/waybar/bin/night-light.py location",
+        "exec-on-event": true
+    },
+    "backlight": {
+        "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>\uf185</span> {percent}%",
+        "tooltip-format": "Brightness: {percent}%",
+        "scroll-step": 5,
+        "smooth-scrolling-threshold": 1,
+        "min-brightness": 5
     },
     "battery": {
         "format": "<span font_family='Font Awesome 6 Free Solid' rise='1024'>{icon}</span> {capacity}%",
